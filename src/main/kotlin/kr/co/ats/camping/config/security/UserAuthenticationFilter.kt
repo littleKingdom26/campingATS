@@ -11,6 +11,7 @@ class UserAuthenticationFilter(authenticationManager: AuthenticationManager): Us
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
 
+
         val userName:String?=obtainUsername(request)
         val password:String?=obtainPassword(request)
 
