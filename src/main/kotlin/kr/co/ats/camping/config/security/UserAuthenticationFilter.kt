@@ -1,23 +1,41 @@
 package kr.co.ats.camping.config.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import kr.co.ats.camping.config.jwt.JwtAuthenticationEntryPoint
+import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.util.StringUtils
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class UserAuthenticationFilter(authenticationManager: AuthenticationManager): UsernamePasswordAuthenticationFilter(authenticationManager) {
 
+    private val log = LoggerFactory.getLogger(UserAuthenticationFilter::class.java)
+
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
 
+        var userName:String?=""
+        var password:String?=""
 
-        val userName:String?=obtainUsername(request)
-        val password:String?=obtainPassword(request)
-
+        val header = request.getHeader("Content-Type")
+        if (MediaType.APPLICATION_JSON_VALUE.equals(header)) {
+            val readLines: List<String> = request.reader.readLines()
+            val flatMap: String = readLines.joinToString("")
+            val jsonObject: JsonObject = JsonParser.parseString(flatMap).asJsonObject
+            userName = jsonObject.get("userName").toString()
+            password = jsonObject.get("password").toString()
+        }else{
+            userName = obtainUsername(request)
+            password = obtainPassword(request)
+        }
         val token:UsernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(userName,password)
-
-
 
         return authenticationManager.authenticate(token)
     }
