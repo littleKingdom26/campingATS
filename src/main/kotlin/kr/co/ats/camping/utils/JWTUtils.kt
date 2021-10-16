@@ -32,7 +32,7 @@ class JWTUtils {
         /**
          * 토큰 생성
          */
-        fun createToken(memberKey: Long): String = JWT.create()
+        fun createToken(memberKey: Long?): String = JWT.create()
             .withIssuer(issuer)
             .withSubject(subject)
             .withIssuedAt(Date())
@@ -44,7 +44,7 @@ class JWTUtils {
         /**
          * 리플레쉬 토큰 생성
          */
-        fun createRefreshToken(memberKey: Long): String = JWT.create()
+        fun createRefreshToken(memberKey: Long?): String = JWT.create()
             .withIssuer(issuer)
             .withSubject(subject)
             .withIssuedAt(Date())

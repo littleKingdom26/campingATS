@@ -8,6 +8,6 @@ import java.util.*
 interface MemberRepository: JpaRepository<TbMember,Long>{
 
 
-    fun findByMemberIdEquals(memberId: String): Optional<TbMember>
+    fun findByMemberId(memberId: String): Optional<TbMember>
 
 }

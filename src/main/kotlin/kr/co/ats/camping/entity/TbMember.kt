@@ -14,7 +14,7 @@ class TbMember(var memberId:String,var memberPassword:String,var role:String) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var memberKey: Long? = null
+    var memberKey: Long?=null
 
     var nickName:String?=null
 

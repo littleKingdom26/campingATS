@@ -32,6 +32,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.auth0:java-jwt:3.18.2")
+    implementation("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")

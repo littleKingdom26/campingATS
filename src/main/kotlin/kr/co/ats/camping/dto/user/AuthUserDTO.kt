@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-data class AuthUserDTO (var memberId:String,var pwd:String ,var memberKey:Long,var nickName:String,var role:String):UserDetails {
+data class AuthUserDTO (var memberId:String,var pwd:String ,var memberKey:Long?,var nickName:String?,var role:String):UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val authorities= mutableListOf<GrantedAuthority>()
         authorities.add(SimpleGrantedAuthority(role))

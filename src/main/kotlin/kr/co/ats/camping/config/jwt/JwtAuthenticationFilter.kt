@@ -20,7 +20,7 @@ class JwtAuthenticationFilter(authManager:AuthenticationManager,private val memb
         if (requestHeader != null && requestHeader.startsWith(JWTUtils.tokenPrefix)) {
             val authToken = requestHeader.substring(7)
             val memberId = JWTUtils.extractEmail(JWTUtils.verity(authToken))
-            if (memberId != null && SecurityContextHolder.getContext().authentication == null) {
+            if (SecurityContextHolder.getContext().authentication == null) {
                 val authUserDTO: AuthUserDTO = memberService.loadUserByUsername(memberId) as AuthUserDTO
                 SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(authUserDTO, null, authUserDTO.authorities)
             }
