@@ -20,8 +20,8 @@ class UserAuthenticationSuccessHandler:AuthenticationSuccessHandler {
         var authUserDTO:AuthUserDTO = authentication.principal as AuthUserDTO
         if (!ObjectUtils.isEmpty(authUserDTO)) {
             // 토큰 생성
-            var token:String = JWTUtils.createToken(authUserDTO.memberKey)
-            var refreshToken = JWTUtils.createRefreshToken(authUserDTO.memberKey)
+            var token:String = JWTUtils.createToken(authUserDTO.memberId)
+            var refreshToken = JWTUtils.createRefreshToken(authUserDTO.memberId)
             response.setHeader(JWTUtils.headerString,JWTUtils.tokenPrefix+token)
             response.setHeader(JWTUtils.refreshString, JWTUtils.tokenPrefix + refreshToken)
 

@@ -17,7 +17,7 @@ class JwtAuthenticationEntryPoint: AuthenticationEntryPoint {
     private val log = LoggerFactory.getLogger(JwtAuthenticationEntryPoint::class.java)
 
     override fun commence(request: HttpServletRequest, response: HttpServletResponse, authException: AuthenticationException) {
-        TODO("Not yet implemented")
+
         val body = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authException.message ?: "")
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         response.contentType = MediaType.APPLICATION_JSON_VALUE
