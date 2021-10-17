@@ -1,4 +1,4 @@
-package kr.co.ats.camping.controller.test
+package kr.co.ats.camping.controller.hello
 
 import kr.co.ats.camping.common.ApiResponse
 import kr.co.ats.camping.dto.user.AuthUserDTO
