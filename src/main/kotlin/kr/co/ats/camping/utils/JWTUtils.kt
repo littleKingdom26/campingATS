@@ -26,30 +26,30 @@ class JWTUtils {
         val refreshString = "RefreshAuthorization"
 
         object JWTClaims {
-            const val MEMBER_KEY = "memberKey"
+            const val MEMBER_ID = "memberId"
         }
 
         /**
          * 토큰 생성
          */
-        fun createToken(memberKey: Long?): String = JWT.create()
+        fun createToken(memberId: String?): String = JWT.create()
             .withIssuer(issuer)
             .withSubject(subject)
             .withIssuedAt(Date())
             .withExpiresAt(Date(Date().time + expiration))
-            .withClaim(JWTClaims.MEMBER_KEY, memberKey)
+            .withClaim(JWTClaims.MEMBER_ID, memberId)
             .sign(algorithm)
 
 
         /**
          * 리플레쉬 토큰 생성
          */
-        fun createRefreshToken(memberKey: Long?): String = JWT.create()
+        fun createRefreshToken(memberId: String?): String = JWT.create()
             .withIssuer(issuer)
             .withSubject(subject)
             .withIssuedAt(Date())
             .withExpiresAt(Date(Date().time + refreshExpireTime))
-            .withClaim(JWTClaims.MEMBER_KEY, memberKey)
+            .withClaim(JWTClaims.MEMBER_ID, memberId)
             .sign(refreshAlgorithm)
 
 
@@ -69,7 +69,7 @@ class JWTUtils {
                 .verify(token)
 
         fun extractEmail(jwt: DecodedJWT): String =
-            jwt.getClaim(JWTClaims.MEMBER_KEY).asString()
+            jwt.getClaim(JWTClaims.MEMBER_ID).asString()
 
     }
 }

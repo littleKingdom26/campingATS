@@ -7,6 +7,7 @@ data class ApiResponse(
 
     companion object{
         fun ok(data:Any?=null)=ApiResponse(true,data)
+        fun okMessage(data:Any?=null,message: String?=null)=ApiResponse(true,data,message = message)
         fun error(message: String? = null) = ApiResponse(false,  message=message)
     }
 }
