@@ -1,6 +1,6 @@
 package kr.co.ats.camping.service.member
 
-import kr.co.ats.camping.dto.user.AuthUserDTO
+import kr.co.ats.camping.dto.authUser.AuthUserDTO
 import kr.co.ats.camping.entity.TbMember
 import kr.co.ats.camping.repository.member.MemberRepository
 import org.slf4j.LoggerFactory
@@ -30,4 +30,6 @@ class MemberService(private val memberRepository: MemberRepository):UserDetailsS
 //        memberRepository.findByMemberIdEquals(username)
         return AuthUserDTO(user.memberId, user.memberPassword, user.memberKey, user.nickName, user.role)
     }
+
+
 }

@@ -1,4 +1,4 @@
-package kr.co.ats.camping.dto.user
+package kr.co.ats.camping.dto.authUser
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority

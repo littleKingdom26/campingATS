@@ -1,7 +1,7 @@
 package kr.co.ats.camping.controller.hello
 
 import kr.co.ats.camping.common.ApiResponse
-import kr.co.ats.camping.dto.user.AuthUserDTO
+import kr.co.ats.camping.dto.authUser.AuthUserDTO
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
