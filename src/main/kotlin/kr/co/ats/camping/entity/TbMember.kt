@@ -10,7 +10,7 @@ import javax.persistence.Id
 @DynamicInsert
 @DynamicUpdate
 @Entity(name="TB_MEMBER")
-class TbMember(var memberId:String,var memberPassword:String,var role:String) {
+class TbMember(var memberId:String,var memberPassword:String,var role:String) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

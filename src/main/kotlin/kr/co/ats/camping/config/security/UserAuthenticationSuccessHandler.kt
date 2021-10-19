@@ -2,7 +2,7 @@ package kr.co.ats.camping.config.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import kr.co.ats.camping.common.ApiResponse
-import kr.co.ats.camping.dto.user.AuthUserDTO
+import kr.co.ats.camping.dto.authUser.AuthUserDTO
 import kr.co.ats.camping.utils.JWTUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
