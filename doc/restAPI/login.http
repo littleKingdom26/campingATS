@@ -6,3 +6,13 @@ Content-Type: application/json
 	"userName":"admin",
     "password": "1234"
 }
+
+
+### 2번째
+POST localhost:8080/login
+Content-Type: application/json
+
+{
+	"userName": "teaho",
+	"password": "1234"
+}

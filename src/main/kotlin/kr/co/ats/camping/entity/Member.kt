@@ -10,14 +10,10 @@ import javax.persistence.Id
 @DynamicInsert
 @DynamicUpdate
 @Entity(name="TB_MEMBER")
-class TbMember(var memberId:String,var memberPassword:String,var role:String) : BaseTimeEntity() {
+class Member(var memberId:String,var nickName:String, var memberPassword:String, var role:String) : BaseTimeEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var memberKey: Long?=null
-
-    var nickName:String?=null
-
-
 
 }
