@@ -1,10 +1,7 @@
-package kr.co.ats.camping.config
+package kr.co.ats.camping.config.security
 
 import kr.co.ats.camping.config.jwt.JwtAuthenticationEntryPoint
 import kr.co.ats.camping.config.jwt.JwtAuthenticationFilter
-import kr.co.ats.camping.config.security.UserAuthenticationFailureHandler
-import kr.co.ats.camping.config.security.UserAuthenticationFilter
-import kr.co.ats.camping.config.security.UserAuthenticationSuccessHandler
 import kr.co.ats.camping.service.member.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Configurable
@@ -53,7 +50,7 @@ class SecurityConfig(
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/login","/api/join").permitAll()
+            .antMatchers("/api/login","/api/signup").permitAll()
             .anyRequest().authenticated()
             .and().cors()
             .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(),memberService))
@@ -68,7 +65,7 @@ class SecurityConfig(
      */
     @Bean
     fun userAuthenticationFilter():UserAuthenticationFilter{
-        var filter = UserAuthenticationFilter(authenticationManagerBean())
+        val filter = UserAuthenticationFilter(authenticationManagerBean())
         filter.setAuthenticationSuccessHandler(userSuccessHandler())
         filter.setAuthenticationFailureHandler(userFailureHandler())
         return filter
