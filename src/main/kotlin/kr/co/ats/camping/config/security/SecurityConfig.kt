@@ -50,7 +50,7 @@ class SecurityConfig(
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/login","/api/signup").permitAll()
+            .antMatchers("/api/login","/api/signUp/**").permitAll()
             .anyRequest().authenticated()
             .and().cors()
             .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(),memberService))
@@ -78,6 +78,4 @@ class SecurityConfig(
     fun userSuccessHandler():AuthenticationSuccessHandler{
         return UserAuthenticationSuccessHandler()
     }
-
-
 }
