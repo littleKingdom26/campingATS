@@ -13,6 +13,6 @@ POST localhost:8080/login
 Content-Type: application/json
 
 {
-	"userName": "teaho",
+	"userName": "taeho1",
 	"password": "1234"
 }
