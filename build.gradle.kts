@@ -42,14 +42,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.22")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8:21.1.0.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.5")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5"){
-        exclude(module="junit")
-        exclude(module="mockito-core")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
     testImplementation("org.springframework.security:spring-security-test:5.5.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    testImplementation("com.ninja-squad:springmockk:3.0.1")
 }
 
 allOpen {
