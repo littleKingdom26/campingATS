@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/code")
-@Api(tags = ["CODE API"], description = "코드 조회 api 리스트")
+@Api(tags = ["Code API"], description = "코드 조회 api 리스트")
 class CommonController {
 
     private val log = LoggerFactory.getLogger(CommonController::class.java)

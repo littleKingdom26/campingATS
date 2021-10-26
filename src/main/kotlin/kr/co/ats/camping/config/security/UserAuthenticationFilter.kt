@@ -17,8 +17,8 @@ class UserAuthenticationFilter(authenticationManager: AuthenticationManager): Us
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
 
-        var userName:String?=""
-        var password:String?=""
+        var userName =""
+        var password =""
 
         val header = request.getHeader("Content-Type")
         if (MediaType.APPLICATION_JSON_VALUE.equals(header)) {
@@ -28,10 +28,10 @@ class UserAuthenticationFilter(authenticationManager: AuthenticationManager): Us
             userName = jsonObject.get("userName").asString
             password = jsonObject.get("password").asString
         }else{
-            userName = obtainUsername(request)
-            password = obtainPassword(request)
+            userName = obtainUsername(request)?:""
+            password = obtainPassword(request)?:""
         }
-        val token:UsernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(userName,password)
+        val token = UsernamePasswordAuthenticationToken(userName,password)
 
         return authenticationManager.authenticate(token)
     }

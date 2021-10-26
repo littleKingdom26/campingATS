@@ -2,7 +2,7 @@ package kr.co.ats.camping.service.member
 
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.authUser.AuthUserDTO
-import kr.co.ats.camping.entity.Member
+import kr.co.ats.camping.entity.member.Member
 import kr.co.ats.camping.repository.member.MemberRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

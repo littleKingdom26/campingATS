@@ -4,7 +4,7 @@ import kr.co.ats.camping.code.Role
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.member.MemberResultDTO
 import kr.co.ats.camping.dto.member.MemberSaveDTO
-import kr.co.ats.camping.entity.Member
+import kr.co.ats.camping.entity.member.Member
 import kr.co.ats.camping.repository.member.MemberRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

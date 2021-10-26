@@ -1,6 +1,6 @@
 package kr.co.ats.camping.repository.member
 
-import kr.co.ats.camping.entity.Member
+import kr.co.ats.camping.entity.member.Member
 import org.springframework.data.jpa.repository.JpaRepository
 
 
