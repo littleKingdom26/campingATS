@@ -1,6 +1,7 @@
-package kr.co.ats.camping.config.exception
+package kr.co.ats.camping.config.handler
 
 import kr.co.ats.camping.common.ApiResponse
+import kr.co.ats.camping.config.exception.CampingATSException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
@@ -19,7 +20,7 @@ class CampingATSExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CampingATSException::class)
-    fun campingATSException(e:CampingATSException):ApiResponse{
-        return ApiResponse.error(messageSource.getMessage(e.message?:"ERROR", null, Locale.getDefault()))
+    fun campingATSException(e: CampingATSException):ApiResponse{
+        return ApiResponse.error(messageSource.getMessage(e.message?:"ERROR", null, Locale.getDefault()), e.message ?: "ERROR")
     }
 }

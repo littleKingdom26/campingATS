@@ -13,6 +13,15 @@ POST localhost:8080/login
 Content-Type: application/json
 
 {
-	"userName": "taeho1",
+	"userName": "taeho_user",
+	"password": "1234"
+}
+
+### 2번째
+POST localhost:8080/login
+Content-Type: application/json
+
+{
+	"userName": "taeho",
 	"password": "1234"
 }
