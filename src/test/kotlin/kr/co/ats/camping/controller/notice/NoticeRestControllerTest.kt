@@ -41,15 +41,15 @@ internal class NoticeRestControllerTest{
 
     @Test
     @WithUserDetails("admin")
-    fun 공지사항_입력(){
+    fun notice_save(){
 
-        val title: String = "제목"
+        val title = "제목"
 
         val noticeSaveDTO = NoticeSaveDTO(title, "내용입니다.~")
         val toJson = Gson().toJson(noticeSaveDTO)
         log.debug("toJson : $toJson")
 
-        mockMvc.perform(post("/api/notice/").contentType(MediaType.APPLICATION_JSON).content(toJson))
+        mockMvc.perform(post("/api/notice").contentType(MediaType.APPLICATION_JSON).content(toJson))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.data.subject").value(title))

@@ -1,11 +1,14 @@
 package kr.co.ats.camping.config.security
 
+import kr.co.ats.camping.config.handler.CampingAccessDeniedHandler
 import kr.co.ats.camping.config.jwt.JwtAuthenticationEntryPoint
 import kr.co.ats.camping.config.jwt.JwtAuthenticationFilter
 import kr.co.ats.camping.service.member.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Configurable
+import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -30,6 +33,10 @@ class SecurityConfig(
         return super.authenticationManagerBean()
     }
 
+
+    @Autowired
+    lateinit var messageSource: MessageSource
+
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
@@ -50,13 +57,17 @@ class SecurityConfig(
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/login","/api/signUp/**").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/notice").hasRole("ADMIN")
+            .antMatchers("/api/login", "/api/signUp/**").permitAll()
             .anyRequest().authenticated()
             .and().cors()
-            .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(),memberService))
+            .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(), memberService))
             .addFilter(userAuthenticationFilter())
-            .exceptionHandling().authenticationEntryPoint(JwtAuthenticationEntryPoint())
+            .exceptionHandling()
+                .authenticationEntryPoint(JwtAuthenticationEntryPoint(messageSource))
+                .accessDeniedHandler(CampingAccessDeniedHandler(messageSource))
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
 
     }
 
@@ -72,7 +83,7 @@ class SecurityConfig(
     }
 
     fun userFailureHandler():AuthenticationFailureHandler{
-        return UserAuthenticationFailureHandler()
+        return UserAuthenticationFailureHandler(messageSource)
     }
 
     fun userSuccessHandler():AuthenticationSuccessHandler{
