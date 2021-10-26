@@ -26,7 +26,7 @@ class NoticeRestController {
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE],consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun noticeSave(@RequestBody noticeSaveDTO: NoticeSaveDTO):ApiResponse{
         log.debug("noticeSaveDTO : $noticeSaveDTO")
-        noticeService.save(noticeSaveDTO);
+        noticeService.save(noticeSaveDTO)
         return ApiResponse.ok()
     }
 
