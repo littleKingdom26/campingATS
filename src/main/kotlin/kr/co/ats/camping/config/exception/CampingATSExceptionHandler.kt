@@ -20,7 +20,6 @@ class CampingATSExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CampingATSException::class)
     fun campingATSException(e:CampingATSException):ApiResponse{
-
         return ApiResponse.error(messageSource.getMessage(e.message?:"ERROR", null, Locale.getDefault()))
     }
 }

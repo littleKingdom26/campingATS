@@ -49,7 +49,6 @@ internal class NoticeRestControllerTest{
         val toJson = Gson().toJson(noticeSaveDTO)
         log.debug("toJson : $toJson")
 
-
         mockMvc.perform(post("/api/notice/").contentType(MediaType.APPLICATION_JSON).content(toJson))
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
