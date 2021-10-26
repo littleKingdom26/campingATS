@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.5.5"
+    id("org.springframework.boot") version "2.5.6"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.spring") version "1.5.31"
@@ -23,10 +23,10 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.5")
-    implementation("org.springframework.boot:spring-boot-starter-hateoas:2.5.5")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.5.5")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.5.5")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.6")
+    implementation("org.springframework.boot:spring-boot-starter-hateoas:2.5.6")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.5.6")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.5.6")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -41,8 +41,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.22")
     annotationProcessor("org.projectlombok:lombok:1.18.22")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8:21.1.0.0")
-    developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.5")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.6")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.6")
     testImplementation("org.springframework.security:spring-security-test:5.5.1")
 }
 

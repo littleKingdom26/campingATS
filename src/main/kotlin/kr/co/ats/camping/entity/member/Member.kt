@@ -1,5 +1,6 @@
-package kr.co.ats.camping.entity
+package kr.co.ats.camping.entity.member
 
+import kr.co.ats.camping.entity.BaseTimeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.Entity

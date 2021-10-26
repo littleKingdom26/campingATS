@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["SIGNUP API"], description = "회원가입 api 리스트")
+@Api(tags = ["SignUp API"], description = "회원가입 api 리스트")
 @RequestMapping("/api/signUp")
 class SignupRestController {
     private val log = LoggerFactory.getLogger(SignupRestController::class.java)
