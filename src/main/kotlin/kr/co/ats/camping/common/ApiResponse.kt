@@ -1,9 +1,15 @@
 package kr.co.ats.camping.common
 
+import io.swagger.annotations.ApiModelProperty
+
 data class ApiResponse(
+    @ApiModelProperty(value="성공여부",example = "true")
     val success: Boolean,
+    @ApiModelProperty(value = "성공여부가 false 일때 CODE",example = "SUC")
     val code: String?=null,
+    @ApiModelProperty(value = "성공여부가 false 일때 메시지")
     val message: String? = null,
+    @ApiModelProperty(value = "결과")
     val data: Any? = null
 ) {
 
