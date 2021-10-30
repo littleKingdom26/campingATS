@@ -1,6 +1,7 @@
 package kr.co.ats.camping.service.member
 
 import kr.co.ats.camping.code.Role
+import kr.co.ats.camping.common.ApiResponse
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.member.MemberResultDTO
 import kr.co.ats.camping.dto.member.MemberSaveDTO
@@ -26,7 +27,7 @@ class SignupService {
     /**
      * 회원 가입
      */
-    fun registerUser(memberSaveDTO: MemberSaveDTO) : MemberResultDTO {
+    fun registerUser(memberSaveDTO: MemberSaveDTO) : ApiResponse {
         val role: String = when (memberSaveDTO.role) {
             Role.ROLE_USER.code -> Role.ROLE_USER.name
             Role.ROLE_ADMIN.code -> Role.ROLE_ADMIN.name
@@ -37,7 +38,7 @@ class SignupService {
         log.debug("role :  $role")
         log.debug("password :  $password")
 
-        return MemberResultDTO(memberRepository.save(Member(memberSaveDTO.memberId, memberSaveDTO.nickName, password, role)))
+        return ApiResponse.ok(MemberResultDTO(memberRepository.save(Member(memberSaveDTO.memberId, memberSaveDTO.nickName, password, role))))
     }
 
     /**
