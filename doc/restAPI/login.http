@@ -25,3 +25,5 @@ Content-Type: application/json
 	"userName": "taeho",
 	"password": "1234"
 }
+
+### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjM4MTU4NzkxLCJpYXQiOjE2MzU1NjY3OTEsIm1lbWJlcklkIjoidGFlaG8ifQ.rouGeziyB5rsIfTkzu5WrW2cZSROX5SMv9B3YyB0AICzm-Ri0mnCm78M8s40zlIMzRhNuTZ5duARa-qCC3zlZw

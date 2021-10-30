@@ -23,7 +23,7 @@ class SignupRestController {
     @ApiOperation(value = "회원 가입", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @PostMapping(value = ["/register"],consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun register(@RequestBody memberSaveDTO: MemberSaveDTO):ApiResponse{
-        log.debug("memberSaveDTO : $memberSaveDTO")
+        log.info("SignupRestController.register")
         signupService.checkMemberId(memberSaveDTO.memberId)
         return ApiResponse.ok(signupService.registerUser(memberSaveDTO))
     }
