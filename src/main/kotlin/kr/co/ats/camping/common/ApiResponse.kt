@@ -2,7 +2,7 @@ package kr.co.ats.camping.common
 
 import io.swagger.annotations.ApiModelProperty
 
-data class ApiResponse(
+open class ApiResponse(
     @ApiModelProperty(value="성공여부",example = "true")
     val success: Boolean,
     @ApiModelProperty(value = "성공여부가 false 일때 CODE",example = "SUC")

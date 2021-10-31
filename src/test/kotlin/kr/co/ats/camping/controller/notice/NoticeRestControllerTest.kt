@@ -2,6 +2,7 @@ package kr.co.ats.camping.controller.notice
 
 
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -83,6 +85,38 @@ internal class NoticeRestControllerTest {
             .andExpect(jsonPath("$.data.subject").value(title))
             .andDo(print())
 
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @DisplayName("공지사항 상세 ")
+    fun notice_detail(){
+        /*32*/
+        val noticeKey:Long = 66;
+        mockMvc
+            .perform(
+                get("/api/notice/detail/$noticeKey")
+            )
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.data.subject").value("sdf33"))
+            .andExpect(jsonPath("$.data.fileList[0].fileName").value("20211030140704576600123930.jpg"))
+            .andDo(print())
+
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @DisplayName("공지사항 상세 건수 없음")
+    fun notice_detail_isNull() {
+        /*32*/
+        val noticeKey: Long = 1;
+        mockMvc
+            .perform(
+                get("/api/notice/detail/$noticeKey")
+            )
+            .andExpect(status().is4xxClientError)
+            .andDo(print())
 
     }
 
