@@ -1,7 +1,9 @@
 package kr.co.ats.camping.dto.notice
 
+import kr.co.ats.camping.controller.notice.NoticeRestController
 import kr.co.ats.camping.entity.notice.Notice
 import org.springframework.hateoas.Link
+import org.springframework.hateoas.server.mvc.linkTo
 
 data class NoticeResultDTO(
     var noticeKey: Long? = null,
@@ -14,12 +16,7 @@ data class NoticeResultDTO(
         noticeKey = notice.noticeKey,
         subject = notice.subject,
         content = notice.content,
-        fileList = notice.fileList?.map { NoticeFileResultDTO(it) })
-
-    constructor(notice: Notice, _link: Link?) : this(
-        noticeKey = notice.noticeKey,
-        subject = notice.subject,
-        content = notice.content,
         fileList = notice.fileList?.map { NoticeFileResultDTO(it) },
-        _links = _link)
+        _links = linkTo<NoticeRestController> { noticeDetail(notice.noticeKey!!) }.withSelfRel())
+
 }

@@ -10,7 +10,6 @@ import kr.co.ats.camping.dto.notice.NoticeSearchDTO
 import kr.co.ats.camping.service.notice.NoticeService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
@@ -33,8 +32,7 @@ class NoticeRestController {
     fun noticeSave(noticeSaveDTO: NoticeSaveDTO):ApiResponse{
         log.info("NoticeRestController.noticeSave")
         val notice = noticeService.save(noticeSaveDTO)
-        val link = linkTo<NoticeRestController> { noticeDetail(notice.noticeKey!!) }
-        return ApiResponse.ok(NoticeResultDTO(notice, link.withSelfRel()))
+        return ApiResponse.ok(NoticeResultDTO(notice))
     }
 
     @ApiOperation(value="공지사항 상세 정보 ", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
