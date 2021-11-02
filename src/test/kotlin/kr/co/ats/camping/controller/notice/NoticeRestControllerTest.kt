@@ -92,7 +92,7 @@ internal class NoticeRestControllerTest {
     @DisplayName("공지사항 상세 ")
     fun notice_detail(){
         /*32*/
-        val noticeKey:Long = 66;
+        val noticeKey:Long = 66
         mockMvc
             .perform(
                 get("/api/notice/detail/$noticeKey")
@@ -110,7 +110,7 @@ internal class NoticeRestControllerTest {
     @DisplayName("공지사항 상세 건수 없음")
     fun notice_detail_isNull() {
         /*32*/
-        val noticeKey: Long = 1;
+        val noticeKey: Long = 1
         mockMvc
             .perform(
                 get("/api/notice/detail/$noticeKey")
@@ -120,6 +120,16 @@ internal class NoticeRestControllerTest {
 
     }
 
+    @Test
+    @WithUserDetails("taeho")
+    @DisplayName("공지사항 목록 조회")
+    fun notice_page(){
+        mockMvc.perform(get("/api/notice"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.success").value("true"))
+            .andExpect(jsonPath("$.data.size").value(20))
+            .andDo(print())
+    }
 }
 
 /*

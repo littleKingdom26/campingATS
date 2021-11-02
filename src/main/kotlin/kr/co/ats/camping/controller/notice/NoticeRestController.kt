@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam
 import kr.co.ats.camping.common.ApiResponse
 import kr.co.ats.camping.dto.notice.NoticeResultDTO
 import kr.co.ats.camping.dto.notice.NoticeSaveDTO
+import kr.co.ats.camping.dto.notice.NoticeSearchDTO
 import kr.co.ats.camping.service.notice.NoticeService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,6 +39,13 @@ class NoticeRestController {
 
     @ApiOperation(value="공지사항 상세 정보 ", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @GetMapping(value = ["/detail/{noticeKey}"],produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun noticeDetail(@ApiParam(value = "공지사항 키",name="noticeKey",example = "66") @PathVariable noticeKey:Long): ApiResponse  = ApiResponse.ok(NoticeResultDTO(noticeService.findById(noticeKey)))
+    fun noticeDetail(@ApiParam(value = "공지사항 키",name="noticeKey",example = "66") @PathVariable noticeKey:Long?): ApiResponse  = ApiResponse.ok(NoticeResultDTO(noticeService.findById(noticeKey?:0)))
+
+    @ApiOperation(value = "공지사항 조회", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun noticePageList(noticeSearchDTO: NoticeSearchDTO):ApiResponse{
+        log.info("NoticeRestController.noticePageList")
+        return ApiResponse.ok(noticeService.findByPage(noticeSearchDTO))
+    }
 
 }
