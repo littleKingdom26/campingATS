@@ -1,6 +1,8 @@
 package kr.co.ats.camping.controller.notice
 
 
+import com.google.gson.Gson
+import kr.co.ats.camping.dto.notice.NoticeUpdateDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -13,8 +15,7 @@ import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
@@ -128,6 +129,52 @@ internal class NoticeRestControllerTest {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.success").value("true"))
             .andExpect(jsonPath("$.data.size").value(20))
+            .andDo(print())
+    }
+
+    @Test
+    @Transactional
+    @WithUserDetails("taeho")
+    @DisplayName("공지사항 수정")
+    fun notice_update(){
+        val noticeKey:Long = 65
+        val title = "공지사항 수정 합니다."
+        val noticeupdate = NoticeUpdateDTO(title, "내용입니다.~")
+        val toJson = Gson().toJson(noticeupdate)
+
+        mockMvc.perform(put("/api/notice/$noticeKey").contentType(MediaType.APPLICATION_JSON).content(toJson))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.data.subject").value(title))
+            .andDo(print())
+    }
+
+    @Test
+    @Transactional
+    @WithUserDetails("taeho")
+    @DisplayName("공지사항 수정_실패")
+    fun notice_update_fail() {
+        val noticeKey: Long = 1
+        val title = "공지사항 수정 합니다."
+        val noticeupdate = NoticeUpdateDTO(title, "내용입니다.~")
+        val toJson = Gson().toJson(noticeupdate)
+
+        mockMvc.perform(put("/api/notice/$noticeKey").contentType(MediaType.APPLICATION_JSON).content(toJson))
+            .andExpect(status().is4xxClientError)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.code").value("NOTICE.NOT_FOUND"))
+            .andDo(print())
+    }
+
+
+    @Test
+    @Transactional
+    @WithUserDetails("taeho")
+    @DisplayName("공지사항 삭제")
+    fun notice_delete() {
+        val noticeKey: Long = 65
+        mockMvc.perform(delete("/api/notice/$noticeKey").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk)
             .andDo(print())
     }
 }

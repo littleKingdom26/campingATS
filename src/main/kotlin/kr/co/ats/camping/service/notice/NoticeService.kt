@@ -5,6 +5,7 @@ import kr.co.ats.camping.dto.common.FileDTO
 import kr.co.ats.camping.dto.notice.NoticePageResultDTO
 import kr.co.ats.camping.dto.notice.NoticeSaveDTO
 import kr.co.ats.camping.dto.notice.NoticeSearchDTO
+import kr.co.ats.camping.dto.notice.NoticeUpdateDTO
 import kr.co.ats.camping.entity.notice.Notice
 import kr.co.ats.camping.entity.notice.NoticeFile
 import kr.co.ats.camping.repository.notice.NoticeRepository
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
 class NoticeService {
@@ -55,9 +57,25 @@ class NoticeService {
      */
     fun findByPage(noticeSearchDTO: NoticeSearchDTO): Page<NoticePageResultDTO> {
         val pageRequest = PageRequest.of(noticeSearchDTO.currentPage, noticeSearchDTO.pageSize, Sort.by("noticeKey").descending())
-        return noticeRepository.findBySubjectContainsOrContentContains(noticeSearchDTO.searchKeyword, noticeSearchDTO.searchKeyword, pageRequest).map {
-            NoticePageResultDTO(
-                it
-            ) }
+        return noticeRepository.findBySubjectContainsOrContentContains(noticeSearchDTO.searchKeyword, noticeSearchDTO.searchKeyword, pageRequest).map { NoticePageResultDTO(it) }
     }
+
+    /**
+     * 공지사항 업데이트
+     */
+    @Transactional
+    fun noticeUpdate(noticeKey: Long, noticeUpdateDTO: NoticeUpdateDTO) : Notice {
+        val notice = noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") }
+        notice.subject = noticeUpdateDTO.subject
+        notice.content = noticeUpdateDTO.content
+        return notice
+    }
+
+    /**
+     * 공지사항 삭제
+     */
+    @Transactional
+    fun noticeDelete(noticeKey: Long) =
+        noticeRepository.delete(noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") })
+
 }

@@ -19,11 +19,11 @@ data class NoticePageResultDTO(
     @ApiModelProperty(value = "링크정보", name = "_links")
     var _links: Link? = null
     ){
-    constructor(notice: Notice?) : this(
-        noticeKey = notice?.noticeKey,
-        subject = notice?.subject,
-        regDt = notice?.regDt?.format(DateTimeFormatter.ISO_DATE),
-        regID = notice?.regId,
-        _links = linkTo<NoticeRestController> { noticeDetail(notice?.noticeKey) }.withRel("detail")
+    constructor(notice: Notice) : this(
+        noticeKey = notice.noticeKey,
+        subject = notice.subject,
+        regDt = notice.regDt.format(DateTimeFormatter.ISO_DATE),
+        regID = notice.regId,
+        _links = linkTo<NoticeRestController> { noticeDetail(notice.noticeKey!!) }.withRel("detail")
     )
 }
