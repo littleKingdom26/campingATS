@@ -8,8 +8,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.math.abs
-import kotlin.random.Random
 
 /**
  * multipartFile 을 물리 저장
@@ -30,7 +28,7 @@ fun MultipartFile?.save(subFolder: String?,root:String): FileDTO {
 fun makeFileName(file: MultipartFile?): String {
     val extension = "." + StringUtils.getFilenameExtension(file?.originalFilename)
     val dtf = DateTimeFormatter.ofPattern("uuuuMMddHHmmssSSS")
-    return LocalDateTime.now().format(dtf) + abs(Random(1).nextInt()).toString() + extension
+    return LocalDateTime.now().format(dtf) + extension
 }
 
 /**

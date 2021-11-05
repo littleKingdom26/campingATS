@@ -14,6 +14,7 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -27,6 +28,7 @@ import javax.transaction.Transactional
 
 
 @Transactional
+@ActiveProfiles("local")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class NoticeRestControllerTest {
 
@@ -177,6 +179,46 @@ internal class NoticeRestControllerTest {
             .andExpect(status().isOk)
             .andDo(print())
     }
+
+    @Test
+    @Transactional
+    @WithUserDetails("taeho")
+    @DisplayName("파일 추가")
+    fun notice_file_update() {
+        val noticeKey: Long = 32
+
+        val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
+        val uploadFile = FileInputStream(file)
+
+        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+
+        mockMvc.perform(
+            multipart("/api/notice/file/"+noticeKey)
+                .file(multipartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andDo(print())
+    }
+
+
+    /*  val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
+        val uploadFile = FileInputStream(file)
+
+        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+
+
+        mockMvc.perform(
+            multipart("/api/notice")
+                .file(multipartFile)
+                .param("subject",title)
+                .param("content","내용입니다.")
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.data.subject").value(title))
+            .andDo(print())**/
 }
 
 /*

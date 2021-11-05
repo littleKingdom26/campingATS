@@ -4,10 +4,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import kr.co.ats.camping.common.ApiResponse
-import kr.co.ats.camping.dto.notice.NoticeResultDTO
-import kr.co.ats.camping.dto.notice.NoticeSaveDTO
-import kr.co.ats.camping.dto.notice.NoticeSearchDTO
-import kr.co.ats.camping.dto.notice.NoticeUpdateDTO
+import kr.co.ats.camping.dto.notice.*
 import kr.co.ats.camping.service.notice.NoticeService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,18 +54,29 @@ class NoticeRestController {
     @ApiOperation(value = "공지사항 수정", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @PutMapping(value = ["/{noticeKey}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun noticeUpdate(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "66") @PathVariable noticeKey: Long, @RequestBody noticeUpdateDTO: NoticeUpdateDTO): ApiResponse =
-        ApiResponse.ok(NoticeResultDTO(noticeService.noticeUpdate(noticeKey, noticeUpdateDTO)))
+        ApiResponse.ok(NoticeResultDTO(noticeService.updateNotice(noticeKey, noticeUpdateDTO)))
 
     @ApiOperation(value = "공지사항 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @DeleteMapping(value = ["/{noticeKey}"],produces = [MediaType.APPLICATION_JSON_VALUE])
     fun noticeDelete(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "66") @PathVariable noticeKey: Long): ApiResponse {
         log.info("NoticeRestController.noticeDelete")
-        noticeService.noticeDelete(noticeKey)
+        noticeService.deleteNotice(noticeKey)
         return ApiResponse.okMessage(message = messageSource.getMessage("MESSAGE.DELETE",null, Locale.getDefault()))
     }
 
-    // 파일 추가
+    @ApiOperation(value="파일 추가 ", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @PostMapping(value=["/file/{noticeKey}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun noticeFileInsert(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "66") @PathVariable noticeKey: Long, noticeFileSaveDTO: NoticeFileSaveDTO): ApiResponse{
+        noticeService.saveFile(noticeKey,noticeFileSaveDTO)
+        return ApiResponse.okMessage(message=messageSource.getMessage("MESSAGE.UPDATE",null, Locale.getDefault()))
+    }
 
     // 파일 삭제
+    @ApiOperation(value="파일 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @DeleteMapping(value=["/file/{noticeFileKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun noticeFileDelete(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "22") @PathVariable noticeFileKey: Long) : ApiResponse {
+//        noticeService.deleteFile(noticeFileKey)
+        return ApiResponse.error()
+    }
 
 }

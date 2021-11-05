@@ -2,10 +2,7 @@ package kr.co.ats.camping.service.notice
 
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.common.FileDTO
-import kr.co.ats.camping.dto.notice.NoticePageResultDTO
-import kr.co.ats.camping.dto.notice.NoticeSaveDTO
-import kr.co.ats.camping.dto.notice.NoticeSearchDTO
-import kr.co.ats.camping.dto.notice.NoticeUpdateDTO
+import kr.co.ats.camping.dto.notice.*
 import kr.co.ats.camping.entity.notice.Notice
 import kr.co.ats.camping.entity.notice.NoticeFile
 import kr.co.ats.camping.repository.notice.NoticeRepository
@@ -17,6 +14,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.io.File
 import javax.transaction.Transactional
 
 @Service
@@ -64,7 +62,7 @@ class NoticeService {
      * 공지사항 업데이트
      */
     @Transactional
-    fun noticeUpdate(noticeKey: Long, noticeUpdateDTO: NoticeUpdateDTO) : Notice {
+    fun updateNotice(noticeKey: Long, noticeUpdateDTO: NoticeUpdateDTO) : Notice {
         val notice = noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") }
         notice.subject = noticeUpdateDTO.subject
         notice.content = noticeUpdateDTO.content
@@ -75,7 +73,24 @@ class NoticeService {
      * 공지사항 삭제
      */
     @Transactional
-    fun noticeDelete(noticeKey: Long) =
+    fun deleteNotice(noticeKey: Long)  {
+        val notice = noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") }
+        notice.fileList?.forEach{it -> File(root+File.separator+it.filePath+File.separator+it.fileName).delete()}
         noticeRepository.delete(noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") })
+    }
 
+    /**
+     * 파일 저장
+     */
+    @Transactional
+    fun saveFile(noticeKey:Long,noticeFileSaveDTO: NoticeFileSaveDTO) {
+        val notice = noticeRepository.findById(noticeKey).orElseThrow { CampingATSException("NOTICE.NOT_FOUND") }
+        val fileList : MutableList<NoticeFile> = notice.fileList?:mutableListOf()
+        for (multipartFile in noticeFileSaveDTO.uploadFile) {
+            // 파일 저장
+            val fileDTO: FileDTO = multipartFile.save("notice", root)
+            fileList.add(NoticeFile(fileDTO.fileName, multipartFile.originalFilename.toString(), fileDTO.filePath, fileDTO.fileSize ?: 0))
+        }
+        notice.fileList = fileList
+    }
 }
