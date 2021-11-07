@@ -203,22 +203,18 @@ internal class NoticeRestControllerTest {
     }
 
 
-    /*  val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
-        val uploadFile = FileInputStream(file)
-
-        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
-
-
-        mockMvc.perform(
-            multipart("/api/notice")
-                .file(multipartFile)
-                .param("subject",title)
-                .param("content","내용입니다.")
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+    @Test
+    @Transactional
+    @WithUserDetails("taeho")
+    @DisplayName("파일삭제")
+    fun notice_file_del(){
+        val noticeFileKey:Long = 23
+        mockMvc.perform(delete("/api/notice/file/"+noticeFileKey))
             .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(jsonPath("$.data.subject").value(title))
-            .andDo(print())**/
+            .andExpect(jsonPath("$.success").value(true))
+            .andDo(print())
+    }
+
 }
 
 /*

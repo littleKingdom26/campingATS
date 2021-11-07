@@ -5,6 +5,7 @@ import kr.co.ats.camping.dto.common.FileDTO
 import kr.co.ats.camping.dto.notice.*
 import kr.co.ats.camping.entity.notice.Notice
 import kr.co.ats.camping.entity.notice.NoticeFile
+import kr.co.ats.camping.repository.notice.NoticeFileRepository
 import kr.co.ats.camping.repository.notice.NoticeRepository
 import kr.co.ats.camping.utils.save
 import org.slf4j.LoggerFactory
@@ -26,6 +27,9 @@ class NoticeService {
 
     @set:Autowired
     lateinit var noticeRepository: NoticeRepository
+
+    @set:Autowired
+    lateinit var noticeFileRepository: NoticeFileRepository
 
     /**
      * 공지사항 저장
@@ -92,5 +96,13 @@ class NoticeService {
             fileList.add(NoticeFile(fileDTO.fileName, multipartFile.originalFilename.toString(), fileDTO.filePath, fileDTO.fileSize ?: 0))
         }
         notice.fileList = fileList
+    }
+
+    @Transactional
+    fun deleteFile(noticeFileKey: Long) {
+        log.debug("noticeFileKey : $noticeFileKey")
+        val noticeFile:NoticeFile = noticeFileRepository.findById(noticeFileKey).orElseThrow { CampingATSException("NOTICE_FILE.NOT_FOUND") }
+        File(root + File.separator + noticeFile.filePath + File.separator + noticeFile.fileName).delete()
+        noticeFileRepository.delete(noticeFile)
     }
 }

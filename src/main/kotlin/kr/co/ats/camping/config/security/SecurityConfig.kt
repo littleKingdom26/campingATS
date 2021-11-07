@@ -58,7 +58,7 @@ class SecurityConfig(
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/api/notice").hasRole("ADMIN")
-            .antMatchers("/api/login", "/api/signUp/**").permitAll()
+            .antMatchers("/api/login", "/api/signUp/**","/imageView/**").permitAll()
             .anyRequest().authenticated()
             .and().cors()
             .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(), memberService))

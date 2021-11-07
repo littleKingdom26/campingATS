@@ -74,9 +74,9 @@ class NoticeRestController {
     // 파일 삭제
     @ApiOperation(value="파일 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @DeleteMapping(value=["/file/{noticeFileKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun noticeFileDelete(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "22") @PathVariable noticeFileKey: Long) : ApiResponse {
-//        noticeService.deleteFile(noticeFileKey)
-        return ApiResponse.error()
+    fun noticeFileDelete(@ApiParam(value = "공지사항 파일 키", name = "noticeFileKey", example = "22") @PathVariable noticeFileKey: Long) : ApiResponse {
+        noticeService.deleteFile(noticeFileKey)
+        return ApiResponse.okMessage(message = messageSource.getMessage("MESSAGE.DELETE", null, Locale.getDefault()))
     }
 
 }
