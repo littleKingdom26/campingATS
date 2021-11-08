@@ -1,7 +1,9 @@
 package kr.co.ats.camping.service.notice
 
+import kr.co.ats.camping.code.Path
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.common.FileDTO
+import kr.co.ats.camping.dto.common.FileResultDTO
 import kr.co.ats.camping.dto.notice.*
 import kr.co.ats.camping.entity.notice.Notice
 import kr.co.ats.camping.entity.notice.NoticeFile
@@ -39,7 +41,7 @@ class NoticeService {
         if (noticeSaveDTO.uploadFile!=null) {
             for (multipartFile in noticeSaveDTO.uploadFile!!) {
                 // 파일 저장
-                val fileDTO:FileDTO = multipartFile.save("notice", root)
+                val fileDTO:FileDTO = multipartFile.save(Path.NOTICE.filePath, root)
                 fileList.add(NoticeFile(fileDTO.fileName, multipartFile.originalFilename.toString(), fileDTO.filePath, fileDTO.fileSize ?: 0))
             }
         }
@@ -92,17 +94,24 @@ class NoticeService {
         val fileList : MutableList<NoticeFile> = notice.fileList?:mutableListOf()
         for (multipartFile in noticeFileSaveDTO.uploadFile) {
             // 파일 저장
-            val fileDTO: FileDTO = multipartFile.save("notice", root)
+            val fileDTO: FileDTO = multipartFile.save(Path.NOTICE.filePath, root)
             fileList.add(NoticeFile(fileDTO.fileName, multipartFile.originalFilename.toString(), fileDTO.filePath, fileDTO.fileSize ?: 0))
         }
         notice.fileList = fileList
     }
 
+    /**
+     * 파일 삭제
+     */
     @Transactional
     fun deleteFile(noticeFileKey: Long) {
-        log.debug("noticeFileKey : $noticeFileKey")
         val noticeFile:NoticeFile = noticeFileRepository.findById(noticeFileKey).orElseThrow { CampingATSException("NOTICE_FILE.NOT_FOUND") }
         File(root + File.separator + noticeFile.filePath + File.separator + noticeFile.fileName).delete()
         noticeFileRepository.delete(noticeFile)
+    }
+
+    fun findByFile(noticeFileKey: Long) : FileResultDTO {
+        val noticeFile: NoticeFile = noticeFileRepository.findById(noticeFileKey).orElseThrow { CampingATSException("NOTICE_FILE.NOT_FOUND") }
+        return FileResultDTO(File(root + File.separator + noticeFile.filePath + File.separator + noticeFile.fileName), noticeFile.originalFileName)
     }
 }
