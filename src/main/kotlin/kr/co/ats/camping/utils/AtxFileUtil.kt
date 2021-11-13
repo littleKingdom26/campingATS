@@ -1,6 +1,7 @@
 package kr.co.ats.camping.utils
 
 import kr.co.ats.camping.dto.common.FileDTO
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
@@ -21,6 +22,16 @@ fun MultipartFile?.save(subFolder: String?,root:String): FileDTO {
     return FileDTO(newFileName, subFolder?: "default", this?.size, newFilePath)
 }
 
+
+fun String?.encodePassword(passwordEncoder: PasswordEncoder):String?{
+    val encode = passwordEncoder.encode(this)
+    return if (encode.isNotEmpty()) {
+        encode
+    }else{
+        null
+    }
+
+}
 
 /**
  * 새로운 파일 생성

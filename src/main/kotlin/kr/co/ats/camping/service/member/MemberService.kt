@@ -1,43 +1,42 @@
 package kr.co.ats.camping.service.member
 
 import kr.co.ats.camping.config.exception.CampingATSException
-import kr.co.ats.camping.dto.authUser.AuthUserDTO
+import kr.co.ats.camping.dto.member.MemberUpdateDTO
 import kr.co.ats.camping.entity.member.Member
 import kr.co.ats.camping.repository.member.MemberRepository
+import kr.co.ats.camping.utils.encodePassword
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.MessageSource
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.*
+import javax.transaction.Transactional
+
 
 @Service
-class MemberService:UserDetailsService {
+class MemberService {
+
     private val log = LoggerFactory.getLogger(MemberService::class.java)
 
-    @set:Autowired lateinit var memberRepository: MemberRepository
+    @set:Autowired
+    lateinit var memberRepository: MemberRepository
 
-    @Autowired lateinit var messageSource: MessageSource
+    @set:Autowired
+    lateinit var passwordEncoder: PasswordEncoder
 
-    /**
-     * 유저 정보 조회
-     */
-    override fun loadUserByUsername(username: String): UserDetails {
-        // 유저 조회가 필요함
-        log.debug("username : {}",username)
-        val loginUser: Member? = memberRepository.findByMemberId(username)
-        if (loginUser != null) {
-            val user: Member = loginUser
-            return AuthUserDTO(user.memberId, user.memberPassword, user.memberKey, user.nickName, user.role)
-        }else{
-            log.debug("message {}", messageSource.getMessage("LOGIN.ERROR", null, Locale.getDefault()))
-            throw CampingATSException("LOGIN.ERROR")
+
+    @Transactional
+    fun updateMember(memberKey: Long, memberUpdateDTO: MemberUpdateDTO): Member {
+        val member = memberRepository.findById(memberKey).orElseThrow { throw CampingATSException("MEMBER.NOT_FOUND") }
+
+        if (memberUpdateDTO.password?.isNotEmpty() == true) {
+            val encodePassword = memberUpdateDTO.password?.encodePassword(passwordEncoder)
+            log.debug("$encodePassword")
+            member.memberPassword = encodePassword!!
         }
 
+        if (memberUpdateDTO.nickName?.isNotEmpty() == true) {
+            member.nickName = memberUpdateDTO.nickName!!
+        }
+        return member
     }
-
-
-
-
 }

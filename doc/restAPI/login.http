@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
 	"userName": "taeho_user",
-	"password": "1234"
+	"password": "4321"
 }
 
 ### 어드민 권한

@@ -3,7 +3,7 @@ package kr.co.ats.camping.config.security
 import kr.co.ats.camping.config.handler.CampingAccessDeniedHandler
 import kr.co.ats.camping.config.jwt.JwtAuthenticationEntryPoint
 import kr.co.ats.camping.config.jwt.JwtAuthenticationFilter
-import kr.co.ats.camping.service.member.MemberService
+import kr.co.ats.camping.service.member.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Configurable
 import org.springframework.context.MessageSource
@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configurable
 @EnableWebSecurity
 class SecurityConfig(
-    private val memberService: MemberService
+    private val userService: UserService
 ) : WebSecurityConfigurerAdapter(){
 
 
@@ -45,7 +45,7 @@ class SecurityConfig(
     @Autowired
     fun configureAuthentication(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
-            .userDetailsService(this.memberService)
+            .userDetailsService(this.userService)
             .passwordEncoder(this.passwordEncoder())
     }
 
@@ -61,7 +61,7 @@ class SecurityConfig(
             .antMatchers("/api/login", "/api/signUp/**","/imageView/**","/fileDownload/**").permitAll()
             .anyRequest().authenticated()
             .and().cors()
-            .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(), memberService))
+            .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(), userService))
             .addFilter(userAuthenticationFilter())
             .exceptionHandling()
                 .authenticationEntryPoint(JwtAuthenticationEntryPoint(messageSource))

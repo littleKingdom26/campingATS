@@ -1,7 +1,7 @@
 package kr.co.ats.camping.config.jwt
 
 import kr.co.ats.camping.dto.authUser.AuthUserDTO
-import kr.co.ats.camping.service.member.MemberService
+import kr.co.ats.camping.service.member.UserService
 import kr.co.ats.camping.utils.JWTUtils
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-class JwtAuthenticationFilter(authManager:AuthenticationManager,private val memberService: MemberService) :
+class JwtAuthenticationFilter(authManager:AuthenticationManager,private val userService: UserService) :
     BasicAuthenticationFilter(authManager) {
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
@@ -23,7 +23,7 @@ class JwtAuthenticationFilter(authManager:AuthenticationManager,private val memb
             val authToken = requestHeader.substring(7)
             val memberId = JWTUtils.extractEmail(JWTUtils.verity(authToken))
             if (SecurityContextHolder.getContext().authentication == null) {
-                val authUserDTO: AuthUserDTO = memberService.loadUserByUsername(memberId) as AuthUserDTO
+                val authUserDTO: AuthUserDTO = userService.loadUserByUsername(memberId) as AuthUserDTO
                 SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(authUserDTO, null, authUserDTO.authorities)
             }
         } else if (refreshHeader != null && refreshHeader.startsWith(JWTUtils.tokenPrefix)) {

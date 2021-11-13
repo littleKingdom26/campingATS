@@ -17,7 +17,6 @@ class SignupService {
 
     private val log = LoggerFactory.getLogger(SignupService::class.java)
 
-
     @set:Autowired
     lateinit var memberRepository: MemberRepository
 
