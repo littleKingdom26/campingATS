@@ -83,5 +83,42 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
     }
 
+    @Test
+    @DisplayName("캠핑장 등록_파일_없음")
+    @WithUserDetails("admin")
+    fun campingRegister_noFile() {
+
+//        val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
+//        val uploadFile = FileInputStream(file)
+
+//        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+
+        val campingName = "호매실 캠핑장"
+
+        val info: MultiValueMap<String, String> = LinkedMultiValueMap()
+
+        info.add("campingName", campingName)
+        info.add("scale", Scale.SMALL.name)
+        info.add("address", "경기도 수원시 권선구")
+        info.add("addressDetail", "호매실로 165번길 30")
+        info.add("latitude", "37.258291629904804")
+        info.add("longitude", "126.96263239178766")
+        info.add("autoYn", CodeYn.Y.name)
+        info.add("content", "설명이 들어갈 예정입니다.")
+        info.add("price", "50000")
+
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/api/camping")
+//                .file(multipartFile)
+                .params(info)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.campingName").value(campingName))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
 
 }

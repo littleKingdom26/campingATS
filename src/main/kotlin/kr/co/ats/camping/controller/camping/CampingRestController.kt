@@ -30,8 +30,7 @@ class CampingRestController {
     fun register(campingSaveDTO: CampingSaveDTO): ApiResponse {
         log.info("CampingRestController.register")
         log.debug("campingSaveDTO.toString() {}", campingSaveDTO.toString())
-        campingService.campingSave(campingSaveDTO)
-        return ApiResponse.error()
+        return ApiResponse.ok(campingService.campingSave(campingSaveDTO))
     }
 
 
