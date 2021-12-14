@@ -8,6 +8,7 @@ import kr.co.ats.camping.service.camping.CampingService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -33,6 +34,14 @@ class CampingRestController {
         return ApiResponse.ok(campingService.campingSave(campingSaveDTO))
     }
 
+    /**
+     * 캠핑장 리스트
+     */
+    @ApiOperation(value = "캠핑장 목록", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun findCampingList(){
+
+    }
 
 
 }

@@ -7,7 +7,8 @@ Content-Type: application/json
     "password": "1234"
 }
 
-### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjM4ODg5NjA5LCJpYXQiOjE2MzYyOTc2MDksIm1lbWJlcklkIjoiYWRtaW4ifQ.EaQwCcVEFpCJnP5pYvVyUmRjD6AoLYyuRiqH5jk6UCVZMFuqNQ3oS2zCExsybrMSFIIejhouk_QMiKGQyTI6Bg
+###
+### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjQyMDg3NjkwLCJpYXQiOjE2Mzk0OTU2OTAsIm1lbWJlcklkIjoiYWRtaW4ifQ.iV4qt7_Lwl0VtjvRggsEfs6o1BpPIHmHD-xMFa4zGnFd1nxLjWxIRzxhD-S3gcm4l5kab5FM0jGoaMMwlhAP3A
 
 
 ### 유저 권한
@@ -18,6 +19,9 @@ Content-Type: application/json
 	"userName": "taeho_user",
 	"password": "4321"
 }
+###
+
+### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjQxMzAzNzUyLCJpYXQiOjE2Mzg3MTE3NTIsIm1lbWJlcklkIjoidGFlaG9fdXNlciJ9.igzRXKprfASpPWIcL0AYnHsvVYyHpuPxuJWkSo1xcEMDSEd5p_kDvAPIywwup--Ym6EocADCyNBjt1xqzAMOAw
 
 ### 어드민 권한
 POST localhost:8080/login
@@ -27,5 +31,5 @@ Content-Type: application/json
 	"userName": "taeho",
 	"password": "1234"
 }
-
+###
 ### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjM4MTU4NzkxLCJpYXQiOjE2MzU1NjY3OTEsIm1lbWJlcklkIjoidGFlaG8ifQ.rouGeziyB5rsIfTkzu5WrW2cZSROX5SMv9B3YyB0AICzm-Ri0mnCm78M8s40zlIMzRhNuTZ5duARa-qCC3zlZw

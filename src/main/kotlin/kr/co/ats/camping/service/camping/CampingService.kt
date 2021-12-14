@@ -37,6 +37,7 @@ class CampingService {
     @set:Autowired
     lateinit var campingInfoRepository:CampingInfoRepository
 
+
     @Transactional
     fun campingSave(campingSaveDTO: CampingSaveDTO): CampingResultDTO {
         val campingInfo = campingInfoRepository.save(CampingInfo())
@@ -53,6 +54,9 @@ class CampingService {
             }
         }
         return CampingResultDTO(campingContent, campingDetail, fileResultList)
+    }
 
+    fun campingSearch():List<CampingInfo>{
+        return campingInfoRepository.findCamping()
     }
 }
