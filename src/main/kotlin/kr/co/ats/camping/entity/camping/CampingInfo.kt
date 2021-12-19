@@ -9,6 +9,7 @@ import javax.persistence.*
 @DynamicUpdate
 @Entity(name = "TB_CAMPING_INFO")
 class CampingInfo(
+    var avgRating:Long,
     @OneToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL],mappedBy = "campingInfo")
     @JoinColumn(name = "CAMPING_INFO_KEY")
     var campingDetail: CampingDetail?,
@@ -18,7 +19,7 @@ class CampingInfo(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "campingInfo")
     var campingReviewList:MutableList<CampingReview>?
     ) : BaseTimeEntity() {
-    constructor() : this(null,null,null)
+    constructor() : this(0L,null,null,null)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

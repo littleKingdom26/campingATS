@@ -120,5 +120,21 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
     }
 
-
+    @Test
+    @DisplayName("캠핑장 목록 조회")
+    @WithUserDetails("admin")
+    fun campingSearch(){
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/camping")
+                .queryParam("searchKeyWord","수원")
+                .queryParam("searchStartRating","0")
+                .queryParam("searchEndRating","10")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.pageable.pageNumber").value(0))
+            .andDo(MockMvcResultHandlers.print())
+    }
 }

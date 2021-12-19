@@ -48,6 +48,7 @@ class NoticeRestController {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun noticePageList(noticeSearchDTO: NoticeSearchDTO):ApiResponse{
         log.info("NoticeRestController.noticePageList")
+        log.debug(noticeSearchDTO.searchKeyword)
         return ApiResponse.ok(noticeService.findByPage(noticeSearchDTO))
     }
 

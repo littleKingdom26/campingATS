@@ -1,9 +1,7 @@
 package kr.co.ats.camping.service.camping
 
 import kr.co.ats.camping.code.Path
-import kr.co.ats.camping.dto.camping.CampingDetailFileResultDTO
-import kr.co.ats.camping.dto.camping.CampingResultDTO
-import kr.co.ats.camping.dto.camping.CampingSaveDTO
+import kr.co.ats.camping.dto.camping.*
 import kr.co.ats.camping.dto.common.FileDTO
 import kr.co.ats.camping.entity.camping.CampingContent
 import kr.co.ats.camping.entity.camping.CampingDetail
@@ -13,6 +11,9 @@ import kr.co.ats.camping.repository.camping.*
 import kr.co.ats.camping.utils.save
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -58,5 +59,11 @@ class CampingService {
 
     fun campingSearch():List<CampingInfo>{
         return campingInfoRepository.findCamping()
+    }
+
+    fun findByPage(campingSearchDTO: CampingSearchDTO): Page<CampingPageResultDTO>? {
+        val pageRequest = PageRequest.of(campingSearchDTO.currentPage, campingSearchDTO.pageSize, Sort.by("campingInfoKey").descending())
+        return campingInfoRepository.findByPage(campingSearchDTO, pageRequest)?.map { CampingPageResultDTO(it) }
+
     }
 }

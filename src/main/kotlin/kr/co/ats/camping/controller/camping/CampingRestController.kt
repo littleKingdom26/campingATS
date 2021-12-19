@@ -4,6 +4,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import kr.co.ats.camping.common.ApiResponse
 import kr.co.ats.camping.dto.camping.CampingSaveDTO
+import kr.co.ats.camping.dto.camping.CampingSearchDTO
 import kr.co.ats.camping.service.camping.CampingService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,8 +40,11 @@ class CampingRestController {
      */
     @ApiOperation(value = "캠핑장 목록", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findCampingList(){
-
+    fun findCampingList(campingSearchDTO: CampingSearchDTO):ApiResponse{
+        log.info("CampingRestController.findCampingList")
+        log.debug("campingSearchDTO.searchKeyWord : ${campingSearchDTO.searchKeyWord} ")
+        log.debug("campingSearchDTO.searchStartRange: ${campingSearchDTO.searchStartRating} , ${campingSearchDTO.searchEndRating}")
+        return ApiResponse.ok(campingService.findByPage(campingSearchDTO))
     }
 
 
