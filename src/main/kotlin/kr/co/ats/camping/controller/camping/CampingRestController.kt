@@ -9,10 +9,7 @@ import kr.co.ats.camping.service.camping.CampingService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Api(tags = ["Camping API"], description = "캠핑장 api 리스트")
@@ -47,5 +44,14 @@ class CampingRestController {
         return ApiResponse.ok(campingService.findByPage(campingSearchDTO))
     }
 
+    /**
+     * 캠핑장 상세 정보
+     */
+    @ApiOperation(value="캠핑장 상세 조회", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @GetMapping(value = ["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun findCampingDetail(@PathVariable campingInfoKey:Long):ApiResponse{
+        log.debug("$campingInfoKey")
+        return ApiResponse.ok(campingService.findDetail(campingInfoKey))
+    }
 
 }

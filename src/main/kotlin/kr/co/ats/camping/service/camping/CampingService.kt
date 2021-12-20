@@ -1,6 +1,7 @@
 package kr.co.ats.camping.service.camping
 
 import kr.co.ats.camping.code.Path
+import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.camping.*
 import kr.co.ats.camping.dto.common.FileDTO
 import kr.co.ats.camping.entity.camping.CampingContent
@@ -65,5 +66,12 @@ class CampingService {
         val pageRequest = PageRequest.of(campingSearchDTO.currentPage, campingSearchDTO.pageSize, Sort.by("campingInfoKey").descending())
         return campingInfoRepository.findByPage(campingSearchDTO, pageRequest)?.map { CampingPageResultDTO(it) }
 
+    }
+
+    fun findDetail(campingInfoKey: Long) : CampingDetailResultDTO{
+        val campingInfo:CampingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow {
+            throw CampingATSException("CAMPING.NOT_FOUND")
+        }
+        return CampingDetailResultDTO(campingInfo)
     }
 }

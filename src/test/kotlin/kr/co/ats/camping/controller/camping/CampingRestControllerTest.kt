@@ -137,4 +137,20 @@ internal class CampingRestControllerTest{
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.pageable.pageNumber").value(0))
             .andDo(MockMvcResultHandlers.print())
     }
+
+    @Test
+    @DisplayName("캠핑장 상세 조회")
+    @WithUserDetails("admin")
+    fun campingDetail(){
+        val campingInfoKey :Long = 21
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/camping/"+campingInfoKey)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.campingInfoKey").value(campingInfoKey))
+            .andDo(MockMvcResultHandlers.print())
+    }
 }
