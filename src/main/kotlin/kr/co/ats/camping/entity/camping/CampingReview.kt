@@ -16,7 +16,7 @@ class CampingReview(
     @JoinColumn(name="CAMPING_INFO_KEY")
     var campingInfo: CampingInfo,
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "campingReview")
-    var campingReviewList :MutableList<CampingReviewFile>
+    var campingReviewList :MutableList<CampingReviewFile>?
 ) :BaseTimeEntity() {
 
     @Id
