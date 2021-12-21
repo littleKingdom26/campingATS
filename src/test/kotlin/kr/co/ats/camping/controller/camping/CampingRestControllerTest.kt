@@ -153,4 +153,16 @@ internal class CampingRestControllerTest{
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.campingInfoKey").value(campingInfoKey))
             .andDo(MockMvcResultHandlers.print())
     }
+
+    @Test
+    @DisplayName("캠핑 비슷한 이름")
+    @WithUserDetails("admin")
+    fun findLikeName(){
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/camping/likeName")
+                .queryParam("name", "수원")
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(MockMvcResultHandlers.print())
+    }
+
 }

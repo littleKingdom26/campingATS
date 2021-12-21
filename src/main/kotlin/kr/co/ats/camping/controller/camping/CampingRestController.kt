@@ -32,6 +32,13 @@ class CampingRestController {
         return ApiResponse.ok(campingService.campingSave(campingSaveDTO))
     }
 
+    @ApiOperation(value="캠핑장 이름 조회[비슷한 이름]", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @GetMapping(value= ["/likeName"], produces = [MediaType.APPLICATION_JSON_VALUE] )
+    fun likeName(@RequestParam("name") name:String) : ApiResponse{
+        log.debug("name : $name")
+        return ApiResponse.ok(campingService.findLikeName(name))
+    }
+
     /**
      * 캠핑장 리스트
      */

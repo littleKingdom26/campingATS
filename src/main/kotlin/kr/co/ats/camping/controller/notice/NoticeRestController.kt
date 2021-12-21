@@ -27,7 +27,6 @@ class NoticeRestController {
     @Autowired
     lateinit var messageSource: MessageSource
 
-
     /**
      * 공지사항 저장
      */
@@ -41,7 +40,7 @@ class NoticeRestController {
 
     @ApiOperation(value = "공지사항 상세 정보 ", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @GetMapping(value = ["/detail/{noticeKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun noticeDetail(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "66") @PathVariable noticeKey: Long): ApiResponse = ApiResponse.ok(NoticeResultDTO(noticeService.findById(noticeKey)))
+    fun noticeDetail(@ApiParam(value = "공지사항 키", name = "noticeKey", example = "66") @PathVariable noticeKey: Long): ApiResponse = ApiResponse.ok(noticeService.findById(noticeKey))
 
 
     @ApiOperation(value = "공지사항 조회", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")

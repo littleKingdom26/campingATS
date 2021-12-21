@@ -30,7 +30,6 @@ fun String?.encodePassword(passwordEncoder: PasswordEncoder):String?{
     }else{
         null
     }
-
 }
 
 /**

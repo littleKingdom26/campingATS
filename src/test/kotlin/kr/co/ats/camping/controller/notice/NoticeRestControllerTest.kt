@@ -127,6 +127,7 @@ internal class NoticeRestControllerTest {
     @WithUserDetails("taeho")
     @DisplayName("공지사항 목록 조회")
     fun notice_page(){
+
         mockMvc.perform(get("/api/notice"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.success").value("true"))

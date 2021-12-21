@@ -74,4 +74,8 @@ class CampingService {
         }
         return CampingDetailResultDTO(campingInfo)
     }
+
+    fun findLikeName(name: String) : List<CampingLikeNameResultDTO> {
+        return campingDetailRepository.findByCampingNameContains(name).map { CampingLikeNameResultDTO(it) }
+    }
 }

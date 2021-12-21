@@ -51,9 +51,9 @@ class NoticeService {
     /**
      * 공지사항 상세 조회
      */
-    fun findById(noticeKey: Long):Notice {
+    fun findById(noticeKey: Long): NoticeResultDTO {
         val optional = noticeRepository.findById(noticeKey)
-        return optional.orElseThrow { CampingATSException("NOTICE.NOT_FOUND") }
+        return NoticeResultDTO(optional.orElseThrow { CampingATSException("NOTICE.NOT_FOUND") })
     }
 
     /**
