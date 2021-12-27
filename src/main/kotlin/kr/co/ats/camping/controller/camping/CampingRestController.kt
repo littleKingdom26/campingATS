@@ -61,4 +61,6 @@ class CampingRestController {
         return ApiResponse.ok(campingService.findDetail(campingInfoKey))
     }
 
+    @ApiOperation(value = "캠핑장 수정", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+
 }

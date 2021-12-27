@@ -5,7 +5,7 @@ import kr.co.ats.camping.code.CodeYn
 import kr.co.ats.camping.code.Scale
 import org.springframework.web.multipart.MultipartFile
 
-data class CampingSaveDTO(
+data class CampingUpdateDTO(
     @ApiParam(value="캠핑장 이름",name="campingName", required = true)
     val campingName:String,
     @ApiParam(value = "캠핑장 규모", name = "scale")
@@ -22,8 +22,6 @@ data class CampingSaveDTO(
     val content:String,
     @ApiParam(value = "가격", name = "price")
     val price:Long,
-    @ApiParam(value = "코드_여부", name = "autoYn")
+    @ApiParam(value = "오토여부", name = "autoYn")
     val autoYn: CodeYn,
-    @ApiParam(value = "첨부 파일", name = "uploadFile")
-    var uploadFile: List<MultipartFile>?
 )

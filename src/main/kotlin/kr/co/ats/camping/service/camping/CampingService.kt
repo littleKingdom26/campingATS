@@ -44,7 +44,7 @@ class CampingService {
     fun campingSave(campingSaveDTO: CampingSaveDTO): CampingResultDTO {
         val campingInfo = campingInfoRepository.save(CampingInfo())
         val campingContent = campingContentRepository.save(CampingContent(campingSaveDTO.content, campingSaveDTO.price, campingInfo))
-        val campingDetail = campingDetailRepository.save(CampingDetail(campingSaveDTO.campingName, campingSaveDTO.scale.name, campingSaveDTO.address, campingSaveDTO.addressDetail, campingSaveDTO.latitude, campingSaveDTO.longitude, campingInfo, null))
+        val campingDetail = campingDetailRepository.save(CampingDetail(campingSaveDTO.campingName, campingSaveDTO.scale.name, campingSaveDTO.address, campingSaveDTO.addressDetail, campingSaveDTO.latitude, campingSaveDTO.longitude,campingSaveDTO.autoYn.name, campingInfo, null))
         // 파일이 있으면 파일 저장 필요함
         val fileResultList = mutableListOf<CampingDetailFileResultDTO>()
         if (campingSaveDTO.uploadFile != null) {

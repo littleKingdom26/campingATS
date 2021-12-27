@@ -14,6 +14,7 @@ class CampingDetail(var campingName:String,
                     var addressDetail:String,
                     var latitude:String,
                     var longitude:String,
+                    var autoYn:String,
                     @OneToOne(fetch = FetchType.LAZY)
                     @JoinColumn(name = "CAMPING_INFO_KEY")
                     val campingInfo: CampingInfo,

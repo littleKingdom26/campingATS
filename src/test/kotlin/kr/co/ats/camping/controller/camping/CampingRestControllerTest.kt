@@ -1,7 +1,9 @@
 package kr.co.ats.camping.controller.camping
 
+import com.google.gson.Gson
 import kr.co.ats.camping.code.CodeYn
 import kr.co.ats.camping.code.Scale
+import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -93,7 +95,7 @@ internal class CampingRestControllerTest{
 
 //        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
 
-        val campingName = "호매실 캠핑장"
+        val campingName = "호매실아아 캠핑장"
 
         val info: MultiValueMap<String, String> = LinkedMultiValueMap()
 
@@ -165,4 +167,21 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
     }
 
+    @Test
+    @DisplayName("캠핑장 정보 수정")
+    @WithUserDetails("taeho")
+    fun campingUpdate(){
+        val compingInfoKey:Long = 21L
+        val campingUpdateDTO: CampingUpdateDTO = CampingUpdateDTO("수정이름",Scale.MEDIUM,"서울특별시 용산구 만리재로40길 15","1층 ","37.5545238844734","126.9681744641918","내용 변경합니다.",50000,CodeYn.N)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/camping/"+ compingInfoKey)
+                .content(Gson().toJson(campingUpdateDTO))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
 }
