@@ -2,9 +2,11 @@ package kr.co.ats.camping.controller.camping
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import kr.co.ats.camping.common.ApiResponse
 import kr.co.ats.camping.dto.camping.CampingSaveDTO
 import kr.co.ats.camping.dto.camping.CampingSearchDTO
+import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import kr.co.ats.camping.service.camping.CampingService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,11 +58,24 @@ class CampingRestController {
      */
     @ApiOperation(value="캠핑장 상세 조회", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @GetMapping(value = ["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findCampingDetail(@PathVariable campingInfoKey:Long):ApiResponse{
+    fun findCampingDetail(@ApiParam(name =  "파일 정보 키") @PathVariable campingInfoKey:Long):ApiResponse{
         log.debug("$campingInfoKey")
         return ApiResponse.ok(campingService.findDetail(campingInfoKey))
     }
 
+    /**
+     * 캠핑장 수정
+     */
     @ApiOperation(value = "캠핑장 수정", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @PutMapping(value = ["/{campingInfoKey}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun campingUpdate(@PathVariable campingInfoKey: Long,@RequestBody campingUpdateDTO: CampingUpdateDTO) : ApiResponse{
+        log.debug("$campingInfoKey")
+        log.debug("$campingUpdateDTO")
+        campingService.update(campingInfoKey,campingUpdateDTO)
+        return ApiResponse.error()
+
+    }
+
+
 
 }

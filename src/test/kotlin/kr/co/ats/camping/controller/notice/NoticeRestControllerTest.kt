@@ -6,7 +6,6 @@ import kr.co.ats.camping.dto.notice.NoticeUpdateDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ClassPathResource
@@ -31,8 +30,6 @@ import javax.transaction.Transactional
 @ActiveProfiles("local")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class NoticeRestControllerTest {
-
-    private val log = LoggerFactory.getLogger(NoticeRestControllerTest::class.java)
 
     lateinit var mockMvc: MockMvc
 
@@ -141,7 +138,7 @@ internal class NoticeRestControllerTest {
     @DisplayName("공지사항 수정")
     fun notice_update(){
         val noticeKey:Long = 65
-        val title = "공지사항 수정 합니다."
+        val title = "공지사항 수정 합니다.!!!"
         val noticeupdate = NoticeUpdateDTO(title, "내용입니다.~")
         val toJson = Gson().toJson(noticeupdate)
 

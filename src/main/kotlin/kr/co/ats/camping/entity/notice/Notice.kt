@@ -18,4 +18,10 @@ class Notice(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var noticeKey: Long? = null
+
+    fun update(subject: String, content: String) {
+        this.subject = subject
+        this.content = content
+    }
+
 }

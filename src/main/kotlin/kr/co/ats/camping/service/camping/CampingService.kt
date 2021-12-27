@@ -75,7 +75,15 @@ class CampingService {
         return CampingDetailResultDTO(campingInfo)
     }
 
+
     fun findLikeName(name: String) : List<CampingLikeNameResultDTO> {
         return campingDetailRepository.findByCampingNameContains(name).map { CampingLikeNameResultDTO(it) }
     }
+
+     /**
+     * 캠핑장 정보 수정
+     */
+    fun update(campingInfoKey: Long, campingUpdateDTO: CampingUpdateDTO) {
+        val campingInfo: CampingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+     }
 }

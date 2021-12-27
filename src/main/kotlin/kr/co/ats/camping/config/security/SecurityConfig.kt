@@ -58,7 +58,9 @@ class SecurityConfig(
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/api/notice").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET,"/api/camping","/api/camping/**").permitAll()
             .antMatchers("/api/login", "/api/signUp/**","/imageView/**","/fileDownload/**").permitAll()
+
             .anyRequest().authenticated()
             .and().cors()
             .and().addFilter(JwtAuthenticationFilter(authenticationManagerBean(), userService))

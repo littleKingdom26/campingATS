@@ -144,7 +144,7 @@ internal class CampingRestControllerTest{
     @DisplayName("캠핑장 상세 조회")
     @WithUserDetails("admin")
     fun campingDetail(){
-        val campingInfoKey :Long = 21
+        val campingInfoKey :Long = 20
 
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/camping/"+campingInfoKey)
@@ -171,8 +171,8 @@ internal class CampingRestControllerTest{
     @DisplayName("캠핑장 정보 수정")
     @WithUserDetails("taeho")
     fun campingUpdate(){
-        val compingInfoKey:Long = 21L
-        val campingUpdateDTO: CampingUpdateDTO = CampingUpdateDTO("수정이름",Scale.MEDIUM,"서울특별시 용산구 만리재로40길 15","1층 ","37.5545238844734","126.9681744641918","내용 변경합니다.",50000,CodeYn.N)
+        val compingInfoKey = 21L
+        val campingUpdateDTO = CampingUpdateDTO("수정이름",Scale.MEDIUM,"서울특별시 용산구 만리재로40길 15","1층 ","37.5545238844734","126.9681744641918","내용 변경합니다.",50000,CodeYn.N)
 
         mockMvc.perform(
             MockMvcRequestBuilders.put("/api/camping/"+ compingInfoKey)

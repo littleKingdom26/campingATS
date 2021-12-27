@@ -15,7 +15,6 @@ import java.util.*
 @ControllerAdvice
 class CampingATSExceptionHandler {
 
-
     @Autowired lateinit var messageSource: MessageSource
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
