@@ -58,7 +58,7 @@ class CampingRestController {
      */
     @ApiOperation(value="캠핑장 상세 조회", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @GetMapping(value = ["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findCampingDetail(@ApiParam(name =  "파일 정보 키") @PathVariable campingInfoKey:Long):ApiResponse{
+    fun findCampingDetail(@PathVariable campingInfoKey:Long):ApiResponse{
         log.debug("$campingInfoKey")
         return ApiResponse.ok(campingService.findDetail(campingInfoKey))
     }
@@ -71,8 +71,7 @@ class CampingRestController {
     fun campingUpdate(@PathVariable campingInfoKey: Long,@RequestBody campingUpdateDTO: CampingUpdateDTO) : ApiResponse{
         log.debug("$campingInfoKey")
         log.debug("$campingUpdateDTO")
-        campingService.update(campingInfoKey,campingUpdateDTO)
-        return ApiResponse.error()
+        return ApiResponse.ok(campingService.update(campingInfoKey, campingUpdateDTO))
 
     }
 

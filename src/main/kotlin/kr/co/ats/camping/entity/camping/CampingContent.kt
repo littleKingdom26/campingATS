@@ -1,5 +1,6 @@
 package kr.co.ats.camping.entity.camping
 
+import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import kr.co.ats.camping.entity.BaseTimeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -16,6 +17,10 @@ class CampingContent(
     @JoinColumn(name="CAMPING_INFO_KEY")
     val campingInfo: CampingInfo
 ):BaseTimeEntity() {
+    fun update(campingUpdateDTO: CampingUpdateDTO) {
+        content = campingUpdateDTO.content
+        price = campingUpdateDTO.price
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

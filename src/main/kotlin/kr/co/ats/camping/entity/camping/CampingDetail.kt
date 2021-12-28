@@ -1,5 +1,6 @@
 package kr.co.ats.camping.entity.camping
 
+import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import kr.co.ats.camping.entity.BaseTimeEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -21,6 +22,15 @@ class CampingDetail(var campingName:String,
                     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "campingDetail")
                     var campingDetailFileList: MutableList<CampingDetailFile>? = null
                     ):BaseTimeEntity() {
+    fun update(campingUpdateDTO: CampingUpdateDTO) {
+        campingName = campingUpdateDTO.campingName
+        scale = campingUpdateDTO.scale.name
+        address = campingUpdateDTO.address
+        addressDetail = campingUpdateDTO.addressDetail
+        latitude = campingUpdateDTO.latitude
+        longitude = campingUpdateDTO.longitude
+        autoYn = campingUpdateDTO.autoYn.name
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

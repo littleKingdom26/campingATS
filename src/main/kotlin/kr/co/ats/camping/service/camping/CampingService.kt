@@ -4,10 +4,7 @@ import kr.co.ats.camping.code.Path
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.camping.*
 import kr.co.ats.camping.dto.common.FileDTO
-import kr.co.ats.camping.entity.camping.CampingContent
-import kr.co.ats.camping.entity.camping.CampingDetail
-import kr.co.ats.camping.entity.camping.CampingDetailFile
-import kr.co.ats.camping.entity.camping.CampingInfo
+import kr.co.ats.camping.entity.camping.*
 import kr.co.ats.camping.repository.camping.*
 import kr.co.ats.camping.utils.save
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,8 +34,10 @@ class CampingService {
     lateinit var campingDetailRepository: CampingDetailRepository
 
     @set:Autowired
-    lateinit var campingInfoRepository:CampingInfoRepository
+    lateinit var campingDetailHisRepository: CampingDetailHisRepository
 
+    @set:Autowired
+    lateinit var campingInfoRepository:CampingInfoRepository
 
     @Transactional
     fun campingSave(campingSaveDTO: CampingSaveDTO): CampingResultDTO {
@@ -83,7 +82,37 @@ class CampingService {
      /**
      * 캠핑장 정보 수정
      */
-    fun update(campingInfoKey: Long, campingUpdateDTO: CampingUpdateDTO) {
-        val campingInfo: CampingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+    @Transactional
+    fun update(campingInfoKey: Long, campingUpdateDTO: CampingUpdateDTO) : CampingResultDTO {
+         val campingInfo: CampingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+
+         var campingContent = campingInfo.campingContent
+         val cnt = campingContentHisRepository.countByCampingContentEquals(campingContent!!)
+         campingContentHisRepository.save(CampingContentHis(cnt + 1, campingContent?.content, campingContent.price, campingContent))
+
+
+//         campingContentRepository.save(campingContent!!)
+
+         var campingDetail = campingInfo.campingDetail
+         var count = campingDetailHisRepository.countByCampingDetail(campingDetail!!)
+         campingDetailHisRepository.save(
+             CampingDetailHis(
+                 count + 1,
+                 campingDetail.campingName,
+                 campingDetail.scale,
+                 campingDetail.address,
+                 campingDetail.addressDetail,
+                 campingDetail.latitude,
+                 campingDetail.longitude,
+                 campingDetail.autoYn,
+                 campingDetail
+             ))
+
+         campingContent?.update(campingUpdateDTO)
+         campingDetail?.update(campingUpdateDTO)
+//         campingDetailRepository.save(campingDetail!!)
+         var save = campingInfoRepository.save(campingInfo)
+         return CampingResultDTO(save)
+
      }
 }
