@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile
 
 data class NoticeFileSaveDTO(
 
-    @ApiModelProperty(value = "첨부 파일", name = "uploadFile")
+    @ApiModelProperty(value = "첨부 파일")
     var uploadFile: List<MultipartFile>
     )
 

@@ -8,22 +8,22 @@ import org.springframework.hateoas.server.mvc.linkTo
 import java.time.format.DateTimeFormatter
 
 data class NoticePageResultDTO(
-    @ApiModelProperty(value = "공지사항_키", name = "noticeKey")
+    @ApiModelProperty(value = "공지사항_키")
     var noticeKey: Long?=null,
-    @ApiModelProperty(value = "제목", name = "subject")
+    @ApiModelProperty(value = "제목")
     var subject: String?=null,
-    @ApiModelProperty(value = "작성일", name = "regDt")
+    @ApiModelProperty(value = "작성일")
     var regDt: String?=null,
-    @ApiModelProperty(value = "작성자", name = "regID")
-    var regID: String?=null,
-    @ApiModelProperty(value = "링크정보", name = "_links")
+    @ApiModelProperty(value = "작성자")
+    var regId: String?=null,
+    @ApiModelProperty(value = "링크정보")
     var _links: Link? = null
     ){
     constructor(notice: Notice) : this(
         noticeKey = notice.noticeKey,
         subject = notice.subject,
         regDt = notice.regDt.format(DateTimeFormatter.ISO_DATE),
-        regID = notice.regId,
+        regId = notice.regId,
         _links = linkTo<NoticeRestController> { noticeDetail(notice.noticeKey!!) }.withRel("detail")
     )
 }

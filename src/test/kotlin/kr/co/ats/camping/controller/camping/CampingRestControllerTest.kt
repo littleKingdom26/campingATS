@@ -56,7 +56,7 @@ internal class CampingRestControllerTest{
         val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
         val uploadFile = FileInputStream(file)
 
-        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+        val multipartFile = MockMultipartFile("uploadFileList", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
 
         val campingName = "호매실 캠핑장"
 
@@ -183,5 +183,39 @@ internal class CampingRestControllerTest{
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
             .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("taeho")
+    fun `캠핑장 정보 사진 추가`(){
+        val file = ClassPathResource("testTemplate/noticeTestFile.xlsx").file
+        val uploadFile = FileInputStream(file)
+        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+        val info: MultiValueMap<String, String> = LinkedMultiValueMap()
+        info.add("campingInfoSeq", "21")
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/api/camping/fileAppend")
+                .file(multipartFile)
+                .params(info)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.campingDetailFileKey").isNotEmpty)
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("taeho")
+    fun `캠핑장 사진 삭제`(){
+        val campingDetailFileKey:Long = 41
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/camping/file/"+ campingDetailFileKey)
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+
     }
 }

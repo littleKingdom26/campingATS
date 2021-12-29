@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 ###
 
-### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjQxMzAzNzUyLCJpYXQiOjE2Mzg3MTE3NTIsIm1lbWJlcklkIjoidGFlaG9fdXNlciJ9.igzRXKprfASpPWIcL0AYnHsvVYyHpuPxuJWkSo1xcEMDSEd5p_kDvAPIywwup--Ym6EocADCyNBjt1xqzAMOAw
+### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjQzMzU5MjE0LCJpYXQiOjE2NDA3NjcyMTQsIm1lbWJlcklkIjoidGFlaG9fdXNlciJ9.1vMlOW32MTRm-QGY01vrs3ihYWC0jUckXChqQ5sT--mB2QTClaNO26tSw1tFv0NCgqpw9uLz3HheRPJ86kF7kw
 
 ### 어드민 권한
 POST localhost:8080/login
@@ -32,4 +32,4 @@ Content-Type: application/json
 	"password": "1234"
 }
 ###
-### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjM4MTU4NzkxLCJpYXQiOjE2MzU1NjY3OTEsIm1lbWJlcklkIjoidGFlaG8ifQ.rouGeziyB5rsIfTkzu5WrW2cZSROX5SMv9B3YyB0AICzm-Ri0mnCm78M8s40zlIMzRhNuTZ5duARa-qCC3zlZw
+### Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXRoIiwiaXNzIjoiQVRTIiwiZXhwIjoxNjQzMzU2MTMyLCJpYXQiOjE2NDA3NjQxMzIsIm1lbWJlcklkIjoidGFlaG8ifQ.g3uP7CRE9Url3SuLyF55iKAF2CbHG3TGgOA1im2xEGmMDdKe3JWJkQDDTdvjCibFlztD_7H8UA1nbZH_lP5kwA

@@ -2,6 +2,7 @@ package kr.co.ats.camping.repository.camping
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import kr.co.ats.camping.code.Scale
 import kr.co.ats.camping.dto.camping.CampingSearchDTO
 import kr.co.ats.camping.entity.camping.CampingInfo
 import kr.co.ats.camping.entity.camping.QCampingInfo
@@ -51,12 +52,12 @@ class CampingInfoRepositoryImpl(
         }
     }
 
-    private fun eqScale(searchScale:String?):BooleanExpression?{
-        return if(searchScale.isNullOrBlank()){
-            null
-        }else{
+    private fun eqScale(searchScale:Scale?):BooleanExpression?{
+        return if (searchScale != null) {
             val campingInfo = QCampingInfo.campingInfo
-            campingInfo.campingDetail.scale.eq(searchScale)
+            campingInfo.campingDetail.scale.eq(searchScale.name)
+        }else{
+            null
         }
     }
 

@@ -1,29 +1,29 @@
 package kr.co.ats.camping.dto.camping
 
-import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiModelProperty
 import kr.co.ats.camping.code.CodeYn
 import kr.co.ats.camping.code.Scale
 import org.springframework.web.multipart.MultipartFile
 
 data class CampingSaveDTO(
-    @ApiParam(value="캠핑장 이름",name="campingName", required = true)
+    @ApiModelProperty(value="캠핑장 이름", required = true)
     val campingName:String,
-    @ApiParam(value = "캠핑장 규모", name = "scale")
+    @ApiModelProperty(value = "캠핑장 규모")
     val scale: Scale,
-    @ApiParam(value = "캠핑장 주소", name = "address", required = true)
+    @ApiModelProperty(value = "캠핑장 주소", required = true)
     val address:String,
-    @ApiParam(value = "캠핑장 상세 주소", name = "addressDetail")
+    @ApiModelProperty(value = "캠핑장 상세 주소")
     val addressDetail:String,
-    @ApiParam(value = "위도", name = "latitude")
+    @ApiModelProperty(value = "위도")
     val latitude:String,
-    @ApiParam(value = "경도", name = "longitude")
+    @ApiModelProperty(value = "경도")
     val longitude:String,
-    @ApiParam(value = "내용", name = "content")
+    @ApiModelProperty(value = "내용")
     val content:String,
-    @ApiParam(value = "가격", name = "price")
+    @ApiModelProperty(value = "가격")
     val price:Long,
-    @ApiParam(value = "코드_여부", name = "autoYn")
+    @ApiModelProperty(value = "코드_여부")
     val autoYn: CodeYn,
-    @ApiParam(value = "첨부 파일", name = "uploadFile")
-    var uploadFile: List<MultipartFile>?
+    @ApiModelProperty(value = "첨부 파일")
+    var uploadFileList: List<MultipartFile>?
 )
