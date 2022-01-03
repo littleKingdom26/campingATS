@@ -3,15 +3,15 @@ package kr.co.ats.camping.controller.camping
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import kr.co.ats.camping.common.ApiResponse
-import kr.co.ats.camping.dto.camping.CampingFileUpdateDTO
-import kr.co.ats.camping.dto.camping.CampingSaveDTO
-import kr.co.ats.camping.dto.camping.CampingSearchDTO
-import kr.co.ats.camping.dto.camping.CampingUpdateDTO
+import kr.co.ats.camping.dto.authUser.AuthUserDTO
+import kr.co.ats.camping.dto.camping.*
 import kr.co.ats.camping.service.camping.CampingService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Api(tags = ["Camping API"], description = "캠핑장 api 리스트")
@@ -95,12 +95,29 @@ class CampingRestController {
      */
     @ApiOperation(value="캠핑장 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @DeleteMapping(value = ["/{campingInfoKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun campingDelete(@PathVariable campingInfoKey: Long):ApiResponse{
+    fun campingDelete(@PathVariable campingInfoKey: Long, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
+        log.info("CampingRestController.campingDelete")
+        log.debug("$campingInfoKey")
+        campingService.deleteCampingInfo(campingInfoKey,authUserDTO)
+        return ApiResponse.ok()
 
-        return ApiResponse.error()
     }
     /**
-     * 후기 작성
+     * 후기 작성 파일도 같이 들어감
+     */
+    @ApiOperation(value = "후기 등록", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @PostMapping(value=["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun registerReview(@PathVariable campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO): ApiResponse {
+        log.info("CampingRestController.registerReview")
+        // 본인이 작성 한 글 확인
+        campingService.reviewSave(campingInfoKey,campingReviewSaveDTO,authUserDTO)
+        log.debug("$campingInfoKey")
+        log.debug("$campingReviewSaveDTO")
+        return ApiResponse.error()
+    }
+
+    /**
+     * 후기 목록
      */
 
     /**

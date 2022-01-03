@@ -3,6 +3,7 @@ package kr.co.ats.camping.controller.camping
 import com.google.gson.Gson
 import kr.co.ats.camping.code.CodeYn
 import kr.co.ats.camping.code.Scale
+import kr.co.ats.camping.code.Season
 import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -218,4 +219,53 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
 
     }
+
+    @Test
+    @WithUserDetails("taeho")
+    fun `캠핑장 정보 삭제_내가_쓴글_아님`(){
+        val campingInfoKey:Long = 65
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/camping/$campingInfoKey")
+        )
+            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(false))
+            .andDo(MockMvcResultHandlers.print())
+
+    }
+
+    @Test
+    @WithUserDetails("taeho_user")
+    fun `캠핑장 정보 삭제_내가_쓴글`() {
+        val campingInfoKey: Long = 66
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/camping/$campingInfoKey")
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("taeho_user")
+    fun `캠핑장_리뷰_등록`() {
+        val campingInfoKey = 65L
+
+        val info: MultiValueMap<String, String> = LinkedMultiValueMap()
+
+        info.add("rating", "10")
+        info.add("review", "꼬짐 아 몰랑 꼬짐")
+        info.add("season", Season.SPRING.name)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/api/camping/$campingInfoKey")
+                .params(info)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+
 }

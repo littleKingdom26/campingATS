@@ -13,6 +13,7 @@ data class CampingDetailResultDTO(
     var latitude: String?,
     var longitude: String?,
     var avgRating: Double?,
+    var regId: String,
     var reviewList: List<CampingReviewResultDTO>?,
     var detailFileList: List<CampingDetailFileResultDTO>?
 ) {
@@ -26,6 +27,7 @@ data class CampingDetailResultDTO(
         latitude = campingInfo.campingDetail?.latitude,
         longitude = campingInfo.campingDetail?.longitude,
         avgRating = campingInfo.avgRating,
+        regId = campingInfo.regId,
         reviewList = campingInfo.campingReviewList?.map { CampingReviewResultDTO(it) }?.sortedBy { campingReviewResultDTO -> campingReviewResultDTO.campingReviewKey },
         detailFileList = campingInfo.campingDetail?.campingDetailFileList?.map { CampingDetailFileResultDTO(it) }?.sortedBy { campingDetailFileResultDTO -> campingDetailFileResultDTO.campingDetailFileKey }
     )
