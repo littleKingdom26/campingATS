@@ -26,7 +26,7 @@ data class CampingResultDTO(
         address = campingInfo.campingDetail?.address,
         addressDetail = campingInfo.campingDetail?.addressDetail,
         autoYn = campingInfo.campingDetail?.autoYn,
-        null
+        fileList = campingInfo.campingDetail?.campingDetailFileList?.map { CampingDetailFileResultDTO(it) }?.sortedBy { campingDetailFileResultDTO -> campingDetailFileResultDTO.campingDetailFileKey }
     )
 }
 

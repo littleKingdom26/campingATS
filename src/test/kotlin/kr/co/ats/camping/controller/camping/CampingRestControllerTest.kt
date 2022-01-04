@@ -236,7 +236,7 @@ internal class CampingRestControllerTest{
     @Test
     @WithUserDetails("taeho_user")
     fun `캠핑장 정보 삭제_내가_쓴글`() {
-        val campingInfoKey: Long = 66
+        val campingInfoKey: Long = 21
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/camping/$campingInfoKey")
         )
@@ -264,6 +264,31 @@ internal class CampingRestControllerTest{
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.campingReviewKey").isNotEmpty)
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("taeho_user")
+    fun `캠핑장 리뷰_등록 사진 추가`() {
+        val file = ClassPathResource("testTemplate/testImg.jpg").file
+        val uploadFile = FileInputStream(file)
+        val multipartFile = MockMultipartFile("uploadFileList", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+        val campingInfoKey = 65L
+        val info: MultiValueMap<String, String> = LinkedMultiValueMap()
+        info.add("rating", "10")
+        info.add("review", "꼬짐 아 몰랑 꼬짐")
+        info.add("season", Season.SPRING.name)
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/api/camping/${campingInfoKey}")
+                .file(multipartFile)
+                .params(info)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.fileList[0].campingReviewFileKey").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
     }
 

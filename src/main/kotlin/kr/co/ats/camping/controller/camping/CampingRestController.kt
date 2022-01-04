@@ -97,7 +97,6 @@ class CampingRestController {
     @DeleteMapping(value = ["/{campingInfoKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun campingDelete(@PathVariable campingInfoKey: Long, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
         log.info("CampingRestController.campingDelete")
-        log.debug("$campingInfoKey")
         campingService.deleteCampingInfo(campingInfoKey,authUserDTO)
         return ApiResponse.ok()
 
@@ -109,20 +108,8 @@ class CampingRestController {
     @PostMapping(value=["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun registerReview(@PathVariable campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO): ApiResponse {
         log.info("CampingRestController.registerReview")
-        // 본인이 작성 한 글 확인
-        campingService.reviewSave(campingInfoKey,campingReviewSaveDTO,authUserDTO)
-        log.debug("$campingInfoKey")
-        log.debug("$campingReviewSaveDTO")
-        return ApiResponse.error()
+        return ApiResponse.ok(campingService.reviewSave(campingInfoKey, campingReviewSaveDTO, authUserDTO))
     }
-
-    /**
-     * 후기 목록
-     */
-
-    /**
-     * 후기 삭제
-     */
 
 
     /**
@@ -132,4 +119,10 @@ class CampingRestController {
     /**
      * 후기 파일 삭제
      */
+
+
+    /**
+     * 후기 삭제
+     */
+
 }

@@ -25,4 +25,6 @@ class CampingContent(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var campingContentKey: Long? = null
+
+
 }

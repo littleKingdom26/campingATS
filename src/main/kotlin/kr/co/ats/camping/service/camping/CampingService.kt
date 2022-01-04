@@ -1,6 +1,7 @@
 package kr.co.ats.camping.service.camping
 
 import kr.co.ats.camping.code.Path
+import kr.co.ats.camping.code.Role
 import kr.co.ats.camping.config.exception.CampingATSException
 import kr.co.ats.camping.dto.authUser.AuthUserDTO
 import kr.co.ats.camping.dto.camping.*
@@ -152,34 +153,35 @@ class CampingService {
         campingDetailFileRepository.delete(campingDetailFile)
     }
 
+    /**
+     * 캠핑장 삭제
+     */
+    @Transactional
     fun deleteCampingInfo(campingInfoKey: Long, authUserDTO: AuthUserDTO) {
         val campingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
-        if (campingInfo.regId != authUserDTO.memberId) {
-            log.debug("${campingInfo.regId}  , ${authUserDTO.memberId}")
+        if (authUserDTO.role!= Role.ROLE_ADMIN.name && campingInfo.regId != authUserDTO.memberId) {
             throw CampingATSException("CAMPING.NOT_DELETE")
         }else{
             // 삭제 하러 갑시다
             // 파일 물리적 삭제
-            log.debug("파일 물리 삭제")
             val campingDetailFileList = campingInfo.campingDetail?.campingDetailFileList
             campingDetailFileList?.forEach { campingDetailFile ->
                 campingDetailFile.delete(root)
             }
             // 파일 디비 삭제
-            log.debug("파일 디비 삭제")
             if (!ObjectUtils.isEmpty(campingDetailFileList)) {
                 campingDetailFileRepository.deleteAll(campingDetailFileList!!)
             }
             // 디테일 삭제
-            log.debug("디테일 삭제")
             campingInfo.campingDetail?.also { campingDetailRepository.delete(it) }
 
             // 컨텐츠 삭제
-            log.debug("컨텐츠 삭제")
             campingInfo.campingContent?.also { campingContentRepository.delete(it) }
 
+            // 후기 삭제
+            campingInfo.campingReviewList?.also {campingReviewRepository.deleteAll(it)}
+
             // 인포 삭제
-            log.debug("인포 삭제")
             campingInfoRepository.delete(campingInfo)
         }
     }
@@ -189,23 +191,25 @@ class CampingService {
      */
     fun reviewSave(campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, authUserDTO: AuthUserDTO): CampingReviewResultDTO {
         val campingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+
         val myReviewCount = campingReviewRepository.countBySeasonAndRegIdAndCampingInfo(campingReviewSaveDTO.season.name, authUserDTO.memberId, campingInfo)
+
         return when (myReviewCount > 0) {
             true -> {
                 throw CampingATSException("CAMPING.DUPLICATE")
             }
             false -> {
+                val campingReview = campingReviewRepository.save(CampingReview(campingReviewSaveDTO.rating, campingReviewSaveDTO.review, campingReviewSaveDTO.season.name, campingInfo, null))
+                val fileResultList = mutableListOf<CampingReviewFileResultDTO>()
+                campingReviewSaveDTO.uploadFileList?.forEach { multipartFile ->
+                    val fileDTO: FileDTO = multipartFile.save(Path.REVIEW.filePath, root)
+                    val saveFile = campingReviewFileRepository.save(CampingReviewFile(fileDTO.fileName, fileDTO.filePath, fileDTO.fileSize ?: 0, campingReview))
+                    fileResultList.add(CampingReviewFileResultDTO(saveFile))
+                }
                 // 파일 물리 저장
-                return CampingReviewResultDTO(campingReviewRepository.save(CampingReview(campingReviewSaveDTO.rating, campingReviewSaveDTO.review, campingReviewSaveDTO.season.name, campingInfo, null)))
-
-
-//                campingReviewSaveDTO.uploadFileList?.isNotEmpty().let { campingReviewSaveDTO -> }
-//                CampingReview()
+                return CampingReviewResultDTO(campingReview, fileResultList)
             }
         }
-
-
-
     }
 
 

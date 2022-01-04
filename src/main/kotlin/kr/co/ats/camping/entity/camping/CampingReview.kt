@@ -22,4 +22,7 @@ class CampingReview(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var campingReviewKey: Long? = null
+
+
+
 }
