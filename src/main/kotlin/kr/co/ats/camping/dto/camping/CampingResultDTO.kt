@@ -13,10 +13,19 @@ data class CampingResultDTO(
     var address: String?,
     var addressDetail: String?,
     var autoYn: String?,
+    var regId : String,
     var fileList: List<CampingDetailFileResultDTO?>?
 ){
     constructor(campingInfo:CampingInfo,campingContent: CampingContent,campingDetail: CampingDetail,campingDetailFile: MutableList<CampingDetailFileResultDTO>):this(
-        campingInfo.campingInfoKey,campingContent.content, campingContent.price,campingDetail.campingName,campingDetail.address,campingDetail.addressDetail,campingDetail.autoYn, campingDetailFile)
+        campingInfo.campingInfoKey,
+        campingContent.content,
+        campingContent.price,
+        campingDetail.campingName,
+        campingDetail.address,
+        campingDetail.addressDetail,
+        campingDetail.autoYn,
+        campingInfo.regId,
+        campingDetailFile)
 
     constructor(campingInfo:CampingInfo) : this(
         campingInfoKey = campingInfo.campingInfoKey,
@@ -26,6 +35,7 @@ data class CampingResultDTO(
         address = campingInfo.campingDetail?.address,
         addressDetail = campingInfo.campingDetail?.addressDetail,
         autoYn = campingInfo.campingDetail?.autoYn,
+        regId = campingInfo.regId,
         fileList = campingInfo.campingDetail?.campingDetailFileList?.map { CampingDetailFileResultDTO(it) }?.sortedBy { campingDetailFileResultDTO -> campingDetailFileResultDTO.campingDetailFileKey }
     )
 }

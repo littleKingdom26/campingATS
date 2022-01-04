@@ -292,5 +292,23 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
     }
 
+    @Test
+    @WithUserDetails("taeho_user")
+    fun `후기_사진_추가`(){
+        val file = ClassPathResource("testTemplate/testImg.jpg").file
+        val uploadFile = FileInputStream(file)
+        val multipartFile = MockMultipartFile("uploadFileList", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+        val campingInfoKey = 21L
+        val campingReviewKey = 7L
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/api/camping/$campingInfoKey/$campingReviewKey")
+                .file(multipartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
 
 }

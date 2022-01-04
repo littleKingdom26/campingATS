@@ -9,6 +9,7 @@ data class CampingPageResultDTO(
     var avgRating: Double,
     var campingInfoKey:Long?,
     var scale:String?,
+    var regId:String,
     var fileList: List<CampingDetailFileResultDTO>?
 ) {
     constructor(campingInfo: CampingInfo) : this(
@@ -17,6 +18,7 @@ data class CampingPageResultDTO(
         avgRating = campingInfo.avgRating,
         campingInfoKey = campingInfo.campingInfoKey,
         scale= campingInfo.campingDetail?.scale,
+        regId = campingInfo.regId,
         fileList = campingInfo.campingDetail?.campingDetailFileList?.map { CampingDetailFileResultDTO(it) }
     )
 }
