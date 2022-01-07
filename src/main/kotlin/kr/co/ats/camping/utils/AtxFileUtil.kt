@@ -2,6 +2,7 @@ package kr.co.ats.camping.utils
 
 import kr.co.ats.camping.dto.common.FileDTO
 import kr.co.ats.camping.entity.camping.CampingDetailFile
+import kr.co.ats.camping.entity.camping.CampingReviewFile
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
@@ -24,6 +25,13 @@ fun MultipartFile?.save(subFolder: String?,root:String): FileDTO {
 }
 
 fun CampingDetailFile.delete(root:String){
+    val filePath = this.filePath
+    val fileName = this.fileName
+    val file = File(root + File.separator + filePath + File.separator + fileName)
+    takeIf { file.isFile }?.apply { file.delete() }
+}
+
+fun CampingReviewFile.delete(root:String){
     val filePath = this.filePath
     val fileName = this.fileName
     val file = File(root + File.separator + filePath + File.separator + fileName)

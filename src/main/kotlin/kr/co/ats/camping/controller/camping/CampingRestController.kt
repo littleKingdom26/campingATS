@@ -84,9 +84,9 @@ class CampingRestController {
      */
     @ApiOperation(value = "사진 파일 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
     @DeleteMapping(value = ["/photo/{campingDetailFileKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun campingDetailFileDelete(@PathVariable campingDetailFileKey:Long): ApiResponse {
+    fun campingDetailFileDelete(@PathVariable campingDetailFileKey:Long,@ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO): ApiResponse {
         log.debug("$campingDetailFileKey")
-        campingService.campingDetailFileDelete(campingDetailFileKey)
+        campingService.campingDetailFileDelete(campingDetailFileKey, authUserDTO)
         return ApiResponse.ok()
     }
 
@@ -108,7 +108,7 @@ class CampingRestController {
     @PostMapping(value=["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun registerReview(@PathVariable campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO): ApiResponse {
         log.info("CampingRestController.registerReview")
-        return ApiResponse.ok(campingService.reviewSave(campingInfoKey, campingReviewSaveDTO, authUserDTO))
+        return ApiResponse.ok(campingService.saveReview(campingInfoKey, campingReviewSaveDTO, authUserDTO))
     }
 
 
@@ -120,14 +120,21 @@ class CampingRestController {
     fun updateReViewPhoto(@PathVariable campingInfoKey: Long,@PathVariable campingReviewKey:Long , campingFileUpdateDTO: CampingFileUpdateDTO ,@ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
         log.info("CampingRestController.updateReViewPhoto")
         log.debug("$campingInfoKey , $campingReviewKey , $campingFileUpdateDTO , $authUserDTO")
-        return ApiResponse.ok(campingService.reviewPhotoAppend(campingInfoKey, campingReviewKey, campingFileUpdateDTO, authUserDTO))
+        return ApiResponse.ok(campingService.appendReviewPhoto(campingInfoKey, campingReviewKey, campingFileUpdateDTO, authUserDTO))
     }
-
 
 
     /**
      * 후기 파일 삭제
      */
+    @ApiOperation(value = "후기 파일 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @DeleteMapping(value = ["/{campingInfoKey}/{campingReviewKey}/{campingReviewFileKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun deleteReviewFile(@PathVariable campingInfoKey: Long, @PathVariable campingReviewKey: Long, @PathVariable campingReviewFileKey: Long, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO) :ApiResponse{
+        log.info("CampingRestController.deleteReviewFile")
+        log.debug("$campingInfoKey , $campingReviewKey, $campingReviewFileKey")
+        campingService.deleteReviewPhoto(campingInfoKey, campingReviewKey,campingReviewFileKey, authUserDTO)
+        return ApiResponse.ok()
+    }
 
 
     /**

@@ -145,10 +145,10 @@ internal class CampingRestControllerTest{
     @DisplayName("캠핑장 상세 조회")
     @WithUserDetails("admin")
     fun campingDetail(){
-        val campingInfoKey :Long = 20
+        val campingInfoKey :Long = 21
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/camping/"+campingInfoKey)
+            MockMvcRequestBuilders.get("/api/camping/$campingInfoKey")
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -303,8 +303,22 @@ internal class CampingRestControllerTest{
         mockMvc.perform(
             MockMvcRequestBuilders.multipart("/api/camping/$campingInfoKey/$campingReviewKey")
                 .file(multipartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-        ).andExpect(MockMvcResultMatchers.status().isOk)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("taeho_user")
+    fun `후기_사진_삭제`(){
+        val campingInfoKey = 21
+        val campingReviewKey = 7
+        val campingReviewFileKey = 3
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/camping/$campingInfoKey/$campingReviewKey/$campingReviewFileKey"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
             .andDo(MockMvcResultHandlers.print())

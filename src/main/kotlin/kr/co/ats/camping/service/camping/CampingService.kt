@@ -147,10 +147,15 @@ class CampingService {
     /**
      * 캠핑장 파일 삭제
      */
-    fun campingDetailFileDelete(campingDetailFileKey: Long) {
+    fun campingDetailFileDelete(campingDetailFileKey: Long, authUserDTO: AuthUserDTO) {
         val campingDetailFile:CampingDetailFile = campingDetailFileRepository.findById(campingDetailFileKey).orElseThrow { throw CampingATSException("CAMPING.FILE.NOT_FOUND") }
-        campingDetailFile.delete(root)
-        campingDetailFileRepository.delete(campingDetailFile)
+        if (campingDetailFile.regId == authUserDTO.memberId || authUserDTO.role == Role.ROLE_ADMIN.name) {
+            campingDetailFile.delete(root)
+            campingDetailFileRepository.delete(campingDetailFile)
+        }else{
+            throw CampingATSException("CAMPING.NOT_FILE_DELETE")
+        }
+
     }
 
     /**
@@ -189,7 +194,7 @@ class CampingService {
     /**
      * 리뷰 등록
      */
-    fun reviewSave(campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, authUserDTO: AuthUserDTO): CampingReviewResultDTO {
+    fun saveReview(campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, authUserDTO: AuthUserDTO): CampingReviewResultDTO {
         val campingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
 
         val myReviewCount = campingReviewRepository.countBySeasonAndRegIdAndCampingInfo(campingReviewSaveDTO.season.name, authUserDTO.memberId, campingInfo)
@@ -212,13 +217,26 @@ class CampingService {
     /**
      * 리뷰 사진 추가
      */
-    fun reviewPhotoAppend(campingInfoKey: Long, campingReviewKey: Long, campingFileUpdateDTO: CampingFileUpdateDTO, authUserDTO: AuthUserDTO) : CampingReviewFileResultDTO{
+    fun appendReviewPhoto(campingInfoKey: Long, campingReviewKey: Long, campingFileUpdateDTO: CampingFileUpdateDTO, authUserDTO: AuthUserDTO) : CampingReviewFileResultDTO{
         val campingReview = campingReviewRepository.findByCampingReviewKeyAndRegIdAndCampingInfo_CampingInfoKey(campingReviewKey, authUserDTO.memberId, campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND_REVIEW") }
         val fileDTO: FileDTO = campingFileUpdateDTO.uploadFile.save(Path.REVIEW.filePath, root)
-
         return CampingReviewFileResultDTO(campingReviewFileRepository.save(CampingReviewFile(fileDTO.fileName, fileDTO.filePath, fileDTO.fileSize ?: 0, campingReview)))
 
     }
 
+    /**
+     * 리뷰 사진 삭제
+     */
+    fun deleteReviewPhoto(campingInfoKey: Long, campingReviewKey: Long, campingReviewFileKey: Long, authUserDTO: AuthUserDTO) {
+        val campingReviewFile = campingReviewFileRepository.findByCampingReviewFileKeyAndCampingReview_CampingReviewKeyAndCampingReview_CampingInfo_CampingInfoKey(campingReviewFileKey, campingReviewKey, campingInfoKey)
+            .orElseThrow { throw CampingATSException("CAMPING.FILE.NOT_FOUND") }
 
+        if (authUserDTO.memberId == campingReviewFile.regId || authUserDTO.role == Role.ROLE_ADMIN.name) {
+            // 파일 삭제
+            campingReviewFile.delete(root)
+            campingReviewFileRepository.delete(campingReviewFile)
+        } else {
+            throw CampingATSException("CAMPING.NOT_FILE_DELETE")
+        }
+    }
 }
