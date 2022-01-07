@@ -133,7 +133,7 @@ class CampingService {
      * 캠핑장 파일 추가
      */
     fun campingDetailFileAppend(campingFileUpdateDTO: CampingFileUpdateDTO) : CampingDetailFileResultDTO? {
-        val campingInfo = campingInfoRepository.findById(campingFileUpdateDTO.campingInfoSeq).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+        val campingInfo = campingInfoRepository.findById(campingFileUpdateDTO.campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
         val campingDetail = campingInfo.campingDetail
         return if (!ObjectUtils.isEmpty(campingFileUpdateDTO.uploadFile)) {
             val fileDTO: FileDTO = campingFileUpdateDTO.uploadFile.save(Path.CAMPING.filePath, root)
@@ -194,22 +194,30 @@ class CampingService {
 
         val myReviewCount = campingReviewRepository.countBySeasonAndRegIdAndCampingInfo(campingReviewSaveDTO.season.name, authUserDTO.memberId, campingInfo)
 
-        return when (myReviewCount > 0) {
-            true -> {
-                throw CampingATSException("CAMPING.DUPLICATE")
+        return if(myReviewCount > 0){
+            throw CampingATSException("CAMPING.DUPLICATE")
+        }else{
+            val campingReview = campingReviewRepository.save(CampingReview(campingReviewSaveDTO.rating, campingReviewSaveDTO.review, campingReviewSaveDTO.season.name, campingInfo, null))
+            val fileResultList = mutableListOf<CampingReviewFileResultDTO>()
+            campingReviewSaveDTO.uploadFileList?.forEach { multipartFile ->
+                val fileDTO: FileDTO = multipartFile.save(Path.REVIEW.filePath, root)
+                val saveFile = campingReviewFileRepository.save(CampingReviewFile(fileDTO.fileName, fileDTO.filePath, fileDTO.fileSize ?: 0, campingReview))
+                fileResultList.add(CampingReviewFileResultDTO(saveFile))
             }
-            false -> {
-                val campingReview = campingReviewRepository.save(CampingReview(campingReviewSaveDTO.rating, campingReviewSaveDTO.review, campingReviewSaveDTO.season.name, campingInfo, null))
-                val fileResultList = mutableListOf<CampingReviewFileResultDTO>()
-                campingReviewSaveDTO.uploadFileList?.forEach { multipartFile ->
-                    val fileDTO: FileDTO = multipartFile.save(Path.REVIEW.filePath, root)
-                    val saveFile = campingReviewFileRepository.save(CampingReviewFile(fileDTO.fileName, fileDTO.filePath, fileDTO.fileSize ?: 0, campingReview))
-                    fileResultList.add(CampingReviewFileResultDTO(saveFile))
-                }
-                // 파일 물리 저장
-                return CampingReviewResultDTO(campingReview, fileResultList)
-            }
+            // 파일 물리 저장
+            CampingReviewResultDTO(campingReview, fileResultList)
         }
+    }
+
+    /**
+     * 리뷰 사진 추가
+     */
+    fun reviewPhotoAppend(campingInfoKey: Long, campingReviewKey: Long, campingFileUpdateDTO: CampingFileUpdateDTO, authUserDTO: AuthUserDTO) : CampingReviewFileResultDTO{
+        val campingReview = campingReviewRepository.findByCampingReviewKeyAndRegIdAndCampingInfo_CampingInfoKey(campingReviewKey, authUserDTO.memberId, campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND_REVIEW") }
+        val fileDTO: FileDTO = campingFileUpdateDTO.uploadFile.save(Path.REVIEW.filePath, root)
+
+        return CampingReviewFileResultDTO(campingReviewFileRepository.save(CampingReviewFile(fileDTO.fileName, fileDTO.filePath, fileDTO.fileSize ?: 0, campingReview)))
+
     }
 
 

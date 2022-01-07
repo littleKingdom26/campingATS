@@ -193,7 +193,7 @@ internal class CampingRestControllerTest{
         val uploadFile = FileInputStream(file)
         val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
         val info: MultiValueMap<String, String> = LinkedMultiValueMap()
-        info.add("campingInfoSeq", "21")
+        info.add("campingInfoKey", "21")
         mockMvc.perform(
             MockMvcRequestBuilders.multipart("/api/camping/fileAppend")
                 .file(multipartFile)
@@ -297,7 +297,7 @@ internal class CampingRestControllerTest{
     fun `후기_사진_추가`(){
         val file = ClassPathResource("testTemplate/testImg.jpg").file
         val uploadFile = FileInputStream(file)
-        val multipartFile = MockMultipartFile("uploadFileList", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
+        val multipartFile = MockMultipartFile("uploadFile", file.name, MediaType.MULTIPART_FORM_DATA_VALUE, uploadFile)
         val campingInfoKey = 21L
         val campingReviewKey = 7L
         mockMvc.perform(

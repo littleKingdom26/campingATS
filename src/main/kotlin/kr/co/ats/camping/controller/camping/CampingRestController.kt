@@ -115,6 +115,15 @@ class CampingRestController {
     /**
      * 후기 파일 추가
      */
+    @ApiOperation(value = "후기 파일 추가", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @PostMapping(value=["/{campingInfoKey}/{campingReviewKey}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun updateReViewPhoto(@PathVariable campingInfoKey: Long,@PathVariable campingReviewKey:Long , campingFileUpdateDTO: CampingFileUpdateDTO ,@ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
+        log.info("CampingRestController.updateReViewPhoto")
+        log.debug("$campingInfoKey , $campingReviewKey , $campingFileUpdateDTO , $authUserDTO")
+        return ApiResponse.ok(campingService.reviewPhotoAppend(campingInfoKey, campingReviewKey, campingFileUpdateDTO, authUserDTO))
+    }
+
+
 
     /**
      * 후기 파일 삭제
