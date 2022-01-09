@@ -13,5 +13,7 @@ interface CampingReviewRepository : JpaRepository<CampingReview, Long> {
     fun findByCampingReviewKeyAndRegIdAndCampingInfo_CampingInfoKey(campingReviewKey: Long, regId: String, campingInfoKey: Long): Optional<CampingReview>
 
 
+    fun findByCampingReviewKeyAndCampingInfo_CampingInfoKey(campingReviewKey: Long, campingInfoKey: Long): Optional<CampingReview>
+
 
 }

@@ -108,7 +108,9 @@ class CampingRestController {
     @PostMapping(value=["/{campingInfoKey}"],produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun registerReview(@PathVariable campingInfoKey: Long, campingReviewSaveDTO: CampingReviewSaveDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO): ApiResponse {
         log.info("CampingRestController.registerReview")
-        return ApiResponse.ok(campingService.saveReview(campingInfoKey, campingReviewSaveDTO, authUserDTO))
+        val saveReview = campingService.saveReview(campingInfoKey, campingReviewSaveDTO, authUserDTO)
+        campingService.updateAvgReview(campingInfoKey)
+        return ApiResponse.ok(saveReview)
     }
 
 
@@ -140,5 +142,26 @@ class CampingRestController {
     /**
      * 후기 삭제
      */
+    @ApiOperation(value = "후기 삭제", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @DeleteMapping(value = ["/{campingInfoKey}/{campingReviewKey}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun deleteReview(@PathVariable campingInfoKey:Long,@PathVariable campingReviewKey:Long, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
+        log.info("CampingRestController.deleteReview")
+        log.debug("$campingInfoKey,$campingReviewKey")
+        campingService.deleteReview(campingInfoKey,campingReviewKey,authUserDTO)
+        campingService.updateAvgReview(campingInfoKey)
+        return ApiResponse.ok()
+    }
+
+    /**
+     * 후기 수정
+     */
+    @ApiOperation(value = "후기 수정", notes = "## Request ##\n" + "[하위 Parameters 참고]\n\n\n\n" + "## Response ## \n" + "[하위 Model 참고]\n\n\n\n")
+    @PutMapping(value = ["/{campingInfoKey}/{campingReviewKey}"], consumes = [MediaType.APPLICATION_JSON_VALUE] ,produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun updateReview(@PathVariable campingInfoKey: Long, @PathVariable campingReviewKey: Long, @RequestBody campingReviewUpdateDTO: CampingReviewUpdateDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
+        log.info("CampingRestController.updateReview")
+        log.debug("$campingInfoKey,$campingReviewKey")
+        campingService.campingReviewUpdate(campingInfoKey,campingReviewKey,campingReviewUpdateDTO, authUserDTO)
+        return ApiResponse.error()
+    }
 
 }

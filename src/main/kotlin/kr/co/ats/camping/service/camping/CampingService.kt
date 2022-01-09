@@ -215,6 +215,32 @@ class CampingService {
     }
 
     /**
+     * 캠핑 리뷰 수정
+     */
+    fun campingReviewUpdate(campingInfoKey: Long, campingReviewKey: Long, campingReviewUpdateDTO: CampingReviewUpdateDTO, authUserDTO: AuthUserDTO) {
+        val campingReview = campingReviewRepository.findByCampingReviewKeyAndCampingInfo_CampingInfoKey(campingReviewKey, campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND_REVIEW") }
+        if (authUserDTO.memberId == campingReview.regId) {
+            // 리뷰 수정
+            // 파일들은 그냥 두고
+            // 업데이트 시즌 중복 확인
+            // 지금 등록한 시즌과 리뷰 시즌이 같은지 학인
+            if (campingReview.season == campingReviewUpdateDTO.season.name) {
+                // 같은 시즌이면 변경
+            }else{
+                //다른 시즌이라면
+                val myReviewCount = campingReviewRepository.countBySeasonAndRegIdAndCampingInfo(campingReviewUpdateDTO.season.name, authUserDTO.memberId, campingReview.campingInfo)
+                if(myReviewCount > 0){
+                    throw CampingATSException("CAMPING.DUPLICATE")
+                }
+            }
+        }else{
+            throw CampingATSException("CAMPING.NOT_UPDATE")
+        }
+
+
+    }
+
+    /**
      * 리뷰 사진 추가
      */
     fun appendReviewPhoto(campingInfoKey: Long, campingReviewKey: Long, campingFileUpdateDTO: CampingFileUpdateDTO, authUserDTO: AuthUserDTO) : CampingReviewFileResultDTO{
@@ -239,4 +265,35 @@ class CampingService {
             throw CampingATSException("CAMPING.NOT_FILE_DELETE")
         }
     }
+
+    /**
+     * 캠핑 리뷰 삭제
+     */
+    fun deleteReview(campingInfoKey: Long, campingReviewKey: Long, authUserDTO: AuthUserDTO) {
+        val campingReview = campingReviewRepository.findByCampingReviewKeyAndCampingInfo_CampingInfoKey(campingReviewKey, campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND_REVIEW") }
+        if (campingReview.regId == authUserDTO.memberId || Role.ROLE_ADMIN.name == authUserDTO.role) {
+            // 삭제
+            // 디비 삭제
+            campingReview.campingReviewList?.forEach {
+                it.delete(root)
+                campingReviewFileRepository.delete(it)
+            }
+            campingReviewRepository.delete(campingReview)
+            //
+        }else {
+            throw CampingATSException("CAMPING.NOT_DELETE")
+        }
+    }
+
+    /**
+     * 캠핑 평균 점수 수정
+     */
+    fun updateAvgReview(campingInfoKey:Long){
+        val campingInfo = campingInfoRepository.findById(campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND") }
+        val average = campingInfo.campingReviewList?.map { campingReview -> campingReview.rating }?.average()
+        campingInfo.avgRating = (average?:0) as Double
+        campingInfoRepository.save(campingInfo)
+    }
+
+
 }

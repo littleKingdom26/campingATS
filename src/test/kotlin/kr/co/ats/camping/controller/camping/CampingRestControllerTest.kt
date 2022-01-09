@@ -324,5 +324,31 @@ internal class CampingRestControllerTest{
             .andDo(MockMvcResultHandlers.print())
     }
 
+    @Test
+    @WithUserDetails("admin")
+    fun `후기_삭제`(){
+        val campingInfoKey = 21
+        val campingReviewKey = 7
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/camping/$campingInfoKey/$campingReviewKey"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    fun `후기_수정`(){
+        val campingInfoKey  = 21
+        val campingReviewKey = 21
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/camping/$campingInfoKey/$campingReviewKey"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))
+            .andDo(MockMvcResultHandlers.print())
+
+
+    }
 
 }
