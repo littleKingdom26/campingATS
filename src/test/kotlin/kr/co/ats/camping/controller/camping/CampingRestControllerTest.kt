@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import kr.co.ats.camping.code.CodeYn
 import kr.co.ats.camping.code.Scale
 import kr.co.ats.camping.code.Season
+import kr.co.ats.camping.dto.camping.CampingReviewUpdateDTO
 import kr.co.ats.camping.dto.camping.CampingUpdateDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -338,11 +339,19 @@ internal class CampingRestControllerTest{
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithUserDetails("taeho_user")
     fun `후기_수정`(){
         val campingInfoKey  = 21
-        val campingReviewKey = 21
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/camping/$campingInfoKey/$campingReviewKey"))
+        val campingReviewKey = 7
+
+        val campingReviewUpdateDTO = CampingReviewUpdateDTO(10,"아몰랑!!", Season.SPRING)
+        val toJson = Gson().toJson(campingReviewUpdateDTO)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/camping/$campingInfoKey/$campingReviewKey")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(toJson)
+        )
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true))

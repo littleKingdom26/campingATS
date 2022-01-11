@@ -160,8 +160,8 @@ class CampingRestController {
     fun updateReview(@PathVariable campingInfoKey: Long, @PathVariable campingReviewKey: Long, @RequestBody campingReviewUpdateDTO: CampingReviewUpdateDTO, @ApiIgnore @AuthenticationPrincipal authUserDTO: AuthUserDTO):ApiResponse{
         log.info("CampingRestController.updateReview")
         log.debug("$campingInfoKey,$campingReviewKey")
-        campingService.campingReviewUpdate(campingInfoKey,campingReviewKey,campingReviewUpdateDTO, authUserDTO)
-        return ApiResponse.error()
+        campingService.updateAvgReview(campingInfoKey)
+        return ApiResponse.ok(campingService.campingReviewUpdate(campingInfoKey, campingReviewKey, campingReviewUpdateDTO, authUserDTO))
     }
 
 }

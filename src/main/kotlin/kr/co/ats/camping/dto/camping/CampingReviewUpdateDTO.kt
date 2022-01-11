@@ -5,9 +5,9 @@ import kr.co.ats.camping.code.Season
 
 data class CampingReviewUpdateDTO(
     @ApiModelProperty(value = "평점", required = true)
-    val rating: Long,
+    var rating: Long,
     @ApiModelProperty(value = "리뷰", required = true)
-    val review: String,
+    var review: String,
     @ApiModelProperty(value = "계절", required = true)
-    val season: Season,
+    var season: Season
 )

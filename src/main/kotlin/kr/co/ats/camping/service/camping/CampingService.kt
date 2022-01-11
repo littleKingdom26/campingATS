@@ -217,20 +217,31 @@ class CampingService {
     /**
      * 캠핑 리뷰 수정
      */
-    fun campingReviewUpdate(campingInfoKey: Long, campingReviewKey: Long, campingReviewUpdateDTO: CampingReviewUpdateDTO, authUserDTO: AuthUserDTO) {
+    fun campingReviewUpdate(campingInfoKey: Long, campingReviewKey: Long, campingReviewUpdateDTO: CampingReviewUpdateDTO, authUserDTO: AuthUserDTO): CampingReviewResultDTO {
         val campingReview = campingReviewRepository.findByCampingReviewKeyAndCampingInfo_CampingInfoKey(campingReviewKey, campingInfoKey).orElseThrow { throw CampingATSException("CAMPING.NOT_FOUND_REVIEW") }
         if (authUserDTO.memberId == campingReview.regId) {
             // 리뷰 수정
             // 파일들은 그냥 두고
             // 업데이트 시즌 중복 확인
             // 지금 등록한 시즌과 리뷰 시즌이 같은지 학인
-            if (campingReview.season == campingReviewUpdateDTO.season.name) {
+            return if (campingReview.season == campingReviewUpdateDTO.season.name) {
                 // 같은 시즌이면 변경
+                campingReview.rating = campingReviewUpdateDTO.rating
+                campingReview.review = campingReviewUpdateDTO.review
+                val save = campingReviewRepository.save(campingReview)
+                CampingReviewResultDTO(save)
+
             }else{
                 //다른 시즌이라면
                 val myReviewCount = campingReviewRepository.countBySeasonAndRegIdAndCampingInfo(campingReviewUpdateDTO.season.name, authUserDTO.memberId, campingReview.campingInfo)
                 if(myReviewCount > 0){
                     throw CampingATSException("CAMPING.DUPLICATE")
+                }else{
+                    campingReview.rating = campingReviewUpdateDTO.rating
+                    campingReview.review = campingReviewUpdateDTO.review
+                    campingReview.season = campingReviewUpdateDTO.season.name
+                    val save = campingReviewRepository.save(campingReview)
+                    CampingReviewResultDTO(save)
                 }
             }
         }else{
