@@ -58,7 +58,8 @@ class SecurityConfig(
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/api/notice").hasRole("ADMIN")
-            .antMatchers(HttpMethod.GET,"/api/camping","/api/camping/**").permitAll()
+            .antMatchers("/api/member/**").authenticated()
+            .antMatchers(HttpMethod.GET,"/api/**").permitAll()
             .antMatchers("/api/login", "/api/signUp/**","/imageView/**","/fileDownload/**").permitAll()
 
             .anyRequest().authenticated()
